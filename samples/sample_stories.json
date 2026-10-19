@@ -1,0 +1,19 @@
+[
+  {
+    "key": "DEMO-101",
+    "summary": "As a registered user, I want to reset my password so that I can regain access to my account",
+    "description": "Users who forget their password need a self-service way to reset it via email.",
+    "acceptance_criteria": "Given I am on the login page\nWhen I click \"Forgot password\" and submit my registered email\nThen I receive a reset link by email within 5 minutes\nGiven I have a reset link\nWhen I open it after 24 hours\nThen I see an error that the link has expired\n- The new password must be at least 12 characters long\n- Submitting an unregistered email shows the same confirmation message",
+    "priority": "High",
+    "labels": ["auth", "security"],
+    "components": ["Web"]
+  },
+  {
+    "key": "DEMO-102",
+    "summary": "As a shopper, I want to add items to my cart so that I can buy several products at once",
+    "description": "Shoppers browse the catalogue and add products to a persistent cart.\n\nAcceptance Criteria:\n- Clicking \"Add to cart\" adds the product with quantity 1\n- Adding the same product again increases its quantity\n- A cart can contain at most 50 distinct products\n- Out-of-stock products cannot be added\n- The cart is kept after logging out and back in",
+    "priority": "Medium",
+    "labels": ["checkout"],
+    "components": ["Web", "Mobile"]
+  }
+]

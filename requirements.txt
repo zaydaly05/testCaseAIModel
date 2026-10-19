@@ -1,0 +1,10 @@
+anthropic>=1.15.0
+pydantic>=2.7
+requests>=2.31
+python-dotenv>=1.0
+streamlit>=1.40
+pandas>=2.0
+
+# development
+pytest>=8.0
+responses>=0.25
