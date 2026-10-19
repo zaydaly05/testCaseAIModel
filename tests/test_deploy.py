@@ -66,6 +66,10 @@ def test_api_generate_and_export(client):
     assert csv.status_code == 200 and csv.text.startswith("Story,ID,Title")
     feature = client.post("/api/export", json={"suites": [suite], "format": "gherkin"}).text
     assert "Feature: Reset password" in feature
+    py = client.post("/api/export", json={"suites": [suite], "format": "pytest"})
+    assert py.status_code == 200 and "test_generated.py" in py.headers["content-disposition"]
+    compile(py.text, "test_generated.py", "exec")
+    assert all(tc["code"].startswith("def test_") for tc in suite["test_cases"])
 
 
 def test_api_rejects_bad_input(client):

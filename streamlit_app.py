@@ -14,7 +14,7 @@ import streamlit as st
 
 from testcase_ai import JiraClient, JiraError, TestCaseModel, TestSuite, UserStory
 from testcase_ai.config import JiraSettings
-from testcase_ai.exporters import to_csv, to_gherkin, to_json
+from testcase_ai.exporters import to_csv, to_gherkin, to_json, to_pytest
 from testcase_ai.model.engine import EXTRA_DATA_DIR, FEEDBACK_PATH, MODEL_PATH
 from testcase_ai.model.taxonomy import CATEGORIES
 
@@ -220,12 +220,14 @@ for story in stories:
                 st.table(pd.DataFrame([{"#": i, "Action": s.action, "Expected result": s.expected_result}
                                        for i, s in enumerate(tc.steps, 1)]).set_index("#"))
                 st.markdown(f"**Expected result:** {tc.expected_result}")
+                st.code(tc.code, language="python")
 
 suites = list(st.session_state.suites.values())
 if suites:
     st.divider()
     st.subheader("Export")
-    e1, e2, e3 = st.columns(3)
+    e0, e1, e2, e3 = st.columns(4)
+    e0.download_button("Download pytest (.py)", to_pytest(suites), "test_generated.py", "text/x-python")
     e1.download_button("Download CSV", to_csv(suites), "test_cases.csv", "text/csv")
     e2.download_button("Download JSON", to_json(suites), "test_cases.json", "application/json")
     e3.download_button("Download Gherkin", to_gherkin(suites), "test_cases.feature", "text/plain")
