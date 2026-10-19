@@ -11,19 +11,20 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-import joblib
-import sklearn
-
 from ..models import CriterionInsight, Priority, TestCase, TestStep, TestSuite, UserStory
-from .classifier import FOCUS_CLASSES, RequirementClassifier
-from .datasets import AI_CLASSIFIED, DEFAULT_WEAK, is_gold, load_training_data
 from .extractor import CriterionFacts, analyze_criterion, analyze_story, extract_acceptance_criteria
+from .heads import FOCUS_CLASSES
+from .portable import PortableClassifier, export_portable, save_portable
 from .taxonomy import CATEGORY_RISK, HIGH_RISK_WORDS
 from .test_design import Draft, design
+
+# scikit-learn, pandas and joblib are only imported for training and for the
+# pickled model, so the deployed app can run on the portable model alone.
 
 MODEL_DIR = Path(os.getenv("TESTCASE_MODEL_DIR", Path(__file__).resolve().parents[2] / "models"))
 MODEL_PATH = MODEL_DIR / "testcase_model.joblib"
 FEEDBACK_PATH = MODEL_DIR / "feedback.csv"
+PORTABLE_PATH = Path(__file__).parent / "artifacts" / "model.json.gz"
 EXTRA_DATA_DIR = MODEL_DIR / "extra_data"
 LOW_CONFIDENCE = 0.5
 MODEL_VERSION = 3
@@ -53,7 +54,8 @@ class TestCaseModel:
 
     name = "TestCaseAI model"
 
-    def __init__(self, classifier: RequirementClassifier, metadata: dict | None = None):
+    def __init__(self, classifier, metadata: dict | None = None):
+        """`classifier` is a RequirementClassifier (scikit-learn) or a PortableClassifier."""
         self.classifier = classifier
         self.metadata = metadata or {}
 
@@ -61,6 +63,11 @@ class TestCaseModel:
     @classmethod
     def train(cls, extra_data: list[str | Path] | None = None, feedback: str | Path | None = FEEDBACK_PATH,
               evaluate: bool = True, include_ai_labeled: bool = False) -> "TestCaseModel":
+        import sklearn
+
+        from .classifier import RequirementClassifier
+        from .datasets import AI_CLASSIFIED, DEFAULT_WEAK, is_gold, load_training_data
+
         if extra_data is None:
             extra_data = sorted(p for p in EXTRA_DATA_DIR.glob("*") if p.suffix.lower() in (".csv", ".xlsx", ".xls", ".txt"))
         weak = DEFAULT_WEAK + ((AI_CLASSIFIED,) if include_ai_labeled else ())
@@ -82,6 +89,8 @@ class TestCaseModel:
         return cls(classifier, metadata)
 
     def save(self, path: str | Path = MODEL_PATH) -> Path:
+        import joblib
+
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({"classifier": self.classifier, "metadata": self.metadata}, path)
@@ -89,12 +98,25 @@ class TestCaseModel:
 
     @classmethod
     def load(cls, path: str | Path = MODEL_PATH) -> "TestCaseModel":
+        import joblib
+
         bundle = joblib.load(path)
         return cls(bundle["classifier"], bundle["metadata"])
+
+    def save_portable(self, path: str | Path = PORTABLE_PATH) -> Path:
+        """Export the trained classifier for environments without scikit-learn (see portable.py)."""
+        return save_portable(export_portable(self.classifier, self.metadata), path)
+
+    @classmethod
+    def load_portable(cls, path: str | Path = PORTABLE_PATH) -> "TestCaseModel":
+        classifier = PortableClassifier.load(path)
+        return cls(classifier, classifier.metadata)
 
     @classmethod
     def load_or_train(cls, path: str | Path = MODEL_PATH) -> "TestCaseModel":
         """Load the saved model; (re)train it when missing or built with another sklearn/model version."""
+        import sklearn
+
         path = Path(path)
         if path.exists():
             try:

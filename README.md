@@ -35,7 +35,10 @@ Jira story ─► split into acceptance criteria
 | End-to-end model (train / save / load / generate / feedback) | `testcase_ai/model/engine.py` | joblib |
 | Training CLI | `testcase_ai/model/train.py` | argparse |
 | Jira client | `testcase_ai/jira_client.py` | requests |
-| UI | `app.py` | Streamlit |
+| Local UI (training, corrections, retraining) | `streamlit_app.py` | Streamlit |
+| Web API (deployed on Vercel) | `api/index.py` | FastAPI |
+| Web page (deployed on Vercel) | `public/index.html` | HTML + JavaScript |
+| Portable model (no scikit-learn needed) | `testcase_ai/model/portable.py`, `testcase_ai/model/artifacts/model.json.gz` | Python standard library |
 
 ### Training data (all from the project's Google Drive)
 
@@ -64,7 +67,7 @@ by at least one test case. How each dataset was chosen is documented in `docs/ex
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # requirements.txt alone = what the deployed API needs
 cp .env.example .env   # optional: Jira credentials
 ```
 
@@ -86,7 +89,7 @@ PROMISE `.txt` files work too. The app trains a model automatically on first sta
 ## Run the interface
 
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 
 1. Load stories — **From Jira** (issue keys or JQL), **Enter manually**, or **Sample stories**.
@@ -95,6 +98,23 @@ streamlit run app.py
    criterion. Fix wrong categories and **Save corrections**.
 4. **Retrain model** in the sidebar — it learns from your corrections and uploaded datasets.
 5. Download test cases as CSV, JSON or Gherkin.
+
+## Deploy to Vercel
+
+The deployed app is a FastAPI function (`api/index.py`) plus a static page (`public/index.html`).
+Vercel's Python functions have a size limit that numpy + scipy + scikit-learn (~300 MB) would hit,
+so the deployment runs the **portable model**: the same trained classifier exported to
+`testcase_ai/model/artifacts/model.json.gz` (3 MB) and executed with the Python standard library.
+`tests/test_deploy.py` checks that it predicts exactly like the scikit-learn model.
+
+1. After retraining, export the portable model and commit it:
+   `python -m testcase_ai.model.train --portable`
+2. Import the GitHub repository in Vercel (framework preset "Other"; `vercel.json` sets everything else).
+3. Optional, for the Jira tab: add `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN`
+   (and `JIRA_ACCEPTANCE_CRITERIA_FIELD`) as environment variables in the Vercel project.
+   The token stays on the server; the page never sees it.
+
+Run the deployed version locally: `uvicorn api.index:app --reload`, then open http://127.0.0.1:8000.
 
 ## Use from Python
 

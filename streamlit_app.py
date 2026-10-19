@@ -1,7 +1,7 @@
 """Streamlit front end: pull stories from Jira (or enter them by hand) and generate test cases
 with the locally trained TestCaseAI model.
 
-Run with:  streamlit run app.py
+Run with:  streamlit run streamlit_app.py
 """
 
 from __future__ import annotations
