@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import argparse
 
-from .engine import FEEDBACK_PATH, MODEL_PATH, TestCaseModel
+from .engine import FEEDBACK_PATH, MODEL_PATH, PORTABLE_PATH, TestCaseModel
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -18,6 +18,8 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--feedback", default=str(FEEDBACK_PATH), help="Corrections file collected from the UI")
     parser.add_argument("--out", default=str(MODEL_PATH), help="Where to save the trained model")
     parser.add_argument("--no-eval", action="store_true", help="Skip cross-validation")
+    parser.add_argument("--portable", nargs="?", const=str(PORTABLE_PATH), default=None,
+                        help=f"Also export the portable model used by the web deployment (default: {PORTABLE_PATH})")
     parser.add_argument("--with-ai-labeled", action="store_true",
                         help="Also train on the LLM-classified requirements (lowered scores in our tests)")
     args = parser.parse_args(argv)
@@ -30,6 +32,8 @@ def main(argv: list[str] | None = None) -> None:
     if "evaluation_report" in meta:
         print(meta["evaluation_report"])
     print(f"Saved model to {path}")
+    if args.portable:
+        print(f"Saved portable model to {model.save_portable(args.portable)}")
 
 
 if __name__ == "__main__":

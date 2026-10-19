@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test Case Generator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f6fde'/%3E%3Cpath d='M9 16l5 5 9-10' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #1c2330; --quiet: #5d6675; --line: #e2e5ea;
+    --accent: #2f6fde; --accent-soft: #e8f0fd; --good: #1f8a4c; --bad: #c4372f; --warn: #b7791f;
+    --radius: 10px; --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12151b; --panel: #1b2029; --ink: #e8ebf0; --quiet: #a0a8b6; --line: #2c3340;
+            --accent: #6b9cf0; --accent-soft: #22304a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 20px 24px 12px; max-width: 1280px; margin: 0 auto; }
+  header h1 { margin: 0; font-size: 22px; }
+  header p { margin: 4px 0 0; color: var(--quiet); }
+  main { display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 20px;
+         max-width: 1280px; margin: 0 auto; padding: 8px 24px 40px; align-items: start; }
+  @media (max-width: 860px) { main { grid-template-columns: minmax(0, 1fr); padding: 8px 16px 32px; } header { padding: 16px; } }
+  .panel { min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .tab { background: none; border: 0; padding: 8px 10px; color: var(--quiet); cursor: pointer; font: inherit;
+         border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 10px 0 4px; }
+  input, textarea, select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+         background: var(--bg); color: var(--ink); font: inherit; }
+  textarea { min-height: 90px; resize: vertical; }
+  .hint { font-size: 12.5px; color: var(--quiet); margin-top: 4px; }
+  button.primary { background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 10px 14px;
+         font: inherit; font-weight: 600; cursor: pointer; width: 100%; margin-top: 14px; }
+  button.secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 8px;
+         padding: 7px 12px; font: inherit; cursor: pointer; }
+  button:disabled { opacity: .6; cursor: wait; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .row > * { flex: 1; }
+  .list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; max-height: 420px; overflow: auto; }
+  .story-pick { text-align: left; background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+         padding: 8px 10px; cursor: pointer; color: var(--ink); font: inherit; }
+  .story-pick b { font-family: var(--mono); font-size: 12.5px; }
+  .story-pick:hover { border-color: var(--accent); }
+  .empty { color: var(--quiet); text-align: center; padding: 48px 16px; }
+  .error { color: var(--bad); margin-top: 10px; font-size: 14px; }
+  h2 { font-size: 17px; margin: 0 0 4px; }
+  h3 { font-size: 15px; margin: 18px 0 8px; }
+  .notes { color: var(--quiet); font-size: 13.5px; margin: 0 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; font-size: 12.5px; }
+  .table-wrap { overflow-x: auto; }
+  .chip { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600;
+          background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+  .chip.negative, .chip.security { background: #fbe9e7; color: var(--bad); }
+  .chip.edge, .chip.performance { background: #fdf3e1; color: var(--warn); }
+  .chip.positive { background: #e5f5ec; color: var(--good); }
+  @media (prefers-color-scheme: dark) {
+    .chip.negative, .chip.security { background: #3a2220; } .chip.edge, .chip.performance { background: #3a2f1c; }
+    .chip.positive { background: #1d3527; }
+  }
+  .bar { height: 6px; background: var(--line); border-radius: 3px; width: 70px; display: inline-block; vertical-align: middle; }
+  .bar span { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+  details.case { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 8px; background: var(--panel); }
+  details.case summary { cursor: pointer; padding: 10px 12px; list-style: none; display: flex; gap: 8px;
+          align-items: baseline; flex-wrap: wrap; }
+  details.case summary::-webkit-details-marker { display: none; }
+  details.case summary .id { font-family: var(--mono); font-size: 12.5px; color: var(--quiet); }
+  details.case summary .title { font-weight: 600; flex: 1 1 260px; }
+  .case-body { padding: 0 12px 12px; font-size: 14px; }
+  .case-body p { margin: 6px 0; }
+  .export { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+  .export span { color: var(--quiet); font-size: 13px; }
+  footer { max-width: 1280px; margin: 0 auto; padding: 0 24px 24px; color: var(--quiet); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Test Case Generator</h1>
+  <p>Paste a user story or pull one from Jira. A locally trained model classifies each acceptance criterion and designs test cases for it.</p>
+</header>
+
+<main>
+  <section class="panel" aria-label="Story input">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="write">Write a story</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="samples">Samples</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="jira">Jira</button>
+    </div>
+
+    <div data-panel="write">
+      <form id="story-form">
+        <div class="row">
+          <div><label for="key">Key</label><input id="key" value="STORY-1" maxlength="64"></div>
+          <div><label for="priority">Priority</label>
+            <select id="priority"><option value="">—</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+        </div>
+        <label for="summary">Summary</label>
+        <input id="summary" required maxlength="1000" placeholder="As a user, I want to reset my password so that I can log in again">
+        <label for="description">Description</label>
+        <textarea id="description" maxlength="20000"></textarea>
+        <label for="criteria">Acceptance criteria</label>
+        <textarea id="criteria" maxlength="20000" placeholder="- The password must be at least 12 characters&#10;Given I am on the login page&#10;When I click &quot;Forgot password&quot;&#10;Then I receive a reset link by email within 5 minutes"></textarea>
+        <div class="hint">One criterion per line. Given / When / Then blocks are kept together.</div>
+        <label for="max-cases">Max test cases: <span id="max-out">12</span></label>
+        <input id="max-cases" type="range" min="3" max="40" value="12">
+        <button class="primary" id="generate" type="submit">Generate test cases</button>
+        <div class="error" id="gen-error" role="alert"></div>
+      </form>
+    </div>
+
+    <div data-panel="samples" hidden>
+      <p class="hint">Two demo stories plus random real stories from the project dataset. Pick one to load it into the form.</p>
+      <button class="secondary" id="load-samples">Load sample stories</button>
+      <div class="list" id="sample-list"></div>
+    </div>
+
+    <div data-panel="jira" hidden>
+      <p class="hint" id="jira-status">Checking Jira connection…</p>
+      <label for="jira-keys">Issue keys</label>
+      <input id="jira-keys" placeholder="PROJ-123, PROJ-124">
+      <label for="jira-jql">or JQL</label>
+      <input id="jira-jql" placeholder="project = PROJ AND issuetype = Story">
+      <button class="secondary" id="jira-fetch" style="margin-top:10px">Fetch stories</button>
+      <div class="error" id="jira-error" role="alert"></div>
+      <div class="list" id="jira-list"></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-live="polite" id="results">
+    <div class="empty" id="empty">Generated test cases appear here.</div>
+  </section>
+</main>
+
+<footer id="model-info"></footer>
+
+<script>
+const $ = (sel) => document.querySelector(sel);
+const suites = [];  // every suite generated in this session, for export
+
+function el(tag, attrs = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") node.className = v; else node.setAttribute(k, v);
+  }
+  for (const c of children.flat()) node.append(c instanceof Node ? c : document.createTextNode(c ?? ""));
+  return node;
+}
+
+async function api(path, body) {
+  const res = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" },
+                                         body: JSON.stringify(body) } : {});
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { const j = await res.json(); detail = typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail); } catch {}
+    throw new Error(detail || `Request failed (${res.status})`);
+  }
+  return res;
+}
+
+// ---- tabs
+document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+  document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== tab.dataset.tab; });
+}));
+
+function showTab(name) { document.querySelector(`.tab[data-tab="${name}"]`).click(); }
+
+function fillForm(story) {
+  $("#key").value = story.key || "STORY-1";
+  $("#summary").value = story.summary || "";
+  $("#description").value = story.description || "";
+  $("#criteria").value = story.acceptance_criteria || "";
+  $("#priority").value = ["High", "Medium", "Low"].includes(story.priority) ? story.priority : "";
+  showTab("write");
+}
+
+function storyList(container, stories) {
+  container.replaceChildren(...stories.map((s) => {
+    const b = el("button", { class: "story-pick", type: "button" }, el("b", {}, s.key), " ", s.summary);
+    b.addEventListener("click", () => fillForm(s));
+    return b;
+  }));
+}
+
+$("#max-cases").addEventListener("input", (e) => { $("#max-out").textContent = e.target.value; });
+
+// ---- samples
+$("#load-samples").addEventListener("click", async () => {
+  try { storyList($("#sample-list"), await (await api("/api/samples?count=8")).json()); }
+  catch (e) { $("#sample-list").replaceChildren(el("div", { class: "error" }, e.message)); }
+});
+
+// ---- jira
+$("#jira-fetch").addEventListener("click", async () => {
+  $("#jira-error").textContent = "";
+  const keys = $("#jira-keys").value.split(/[\s,]+/).filter(Boolean);
+  const jql = $("#jira-jql").value.trim();
+  try {
+    storyList($("#jira-list"), await (await api("/api/jira/stories", keys.length ? { keys } : { jql })).json());
+  } catch (e) { $("#jira-error").textContent = e.message; }
+});
+
+// ---- generate
+$("#story-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn = $("#generate");
+  btn.disabled = true; btn.textContent = "Generating…"; $("#gen-error").textContent = "";
+  try {
+    const story = { key: $("#key").value.trim() || "STORY-1", summary: $("#summary").value.trim(),
+                    description: $("#description").value, acceptance_criteria: $("#criteria").value,
+                    priority: $("#priority").value || null };
+    const suite = await (await api("/api/generate", { story, max_cases: Number($("#max-cases").value) })).json();
+    const i = suites.findIndex((s) => s.story.key === suite.story.key);
+    if (i >= 0) suites[i] = suite; else suites.push(suite);
+    render(suite);
+  } catch (err) { $("#gen-error").textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Generate test cases"; }
+});
+
+function render(suite) {
+  const analysis = el("table", {},
+    el("thead", {}, el("tr", {}, ["Criterion", "Category", "Confidence", "Techniques", "Facts found"].map((h) => el("th", {}, h)))),
+    el("tbody", {}, suite.insights.map((i) => el("tr", {},
+      el("td", {}, i.text),
+      el("td", {}, el("span", { class: "chip" }, i.category.replace("_", " "))),
+      el("td", {}, el("span", { class: "bar", title: i.confidence.toFixed(2) },
+        Object.assign(el("span"), { style: `width:${Math.round(i.confidence * 100)}%` })), " ", i.confidence.toFixed(2)),
+      el("td", {}, i.techniques.map((t) => t.replace("_", " ")).join(", ")),
+      el("td", {}, [i.limits.join(", "), i.fields.join(", "), i.roles.join(", "), i.states.join(" → ")].filter(Boolean).join("; ")),
+    ))));
+
+  const cases = suite.test_cases.map((tc) => {
+    const steps = el("table", {}, el("thead", {}, el("tr", {}, el("th", {}, "#"), el("th", {}, "Action"), el("th", {}, "Expected result"))),
+      el("tbody", {}, tc.steps.map((s, n) => el("tr", {}, el("td", {}, String(n + 1)), el("td", {}, s.action), el("td", {}, s.expected_result)))));
+    return el("details", { class: "case" },
+      el("summary", {}, el("span", { class: "id" }, tc.id), el("span", { class: "title" }, tc.title),
+        el("span", { class: `chip ${tc.type}` }, tc.type), el("span", { class: "chip" }, tc.priority)),
+      el("div", { class: "case-body" },
+        el("p", {}, el("b", {}, "Technique: "), tc.technique),
+        el("p", {}, el("b", {}, "Covers: "), tc.acceptance_criterion),
+        tc.preconditions.length ? el("p", {}, el("b", {}, "Preconditions: "), tc.preconditions.join("; ")) : "",
+        tc.test_data.length ? el("p", {}, el("b", {}, "Test data: "), tc.test_data.join("; ")) : "",
+        el("div", { class: "table-wrap" }, steps),
+        el("p", {}, el("b", {}, "Expected result: "), tc.expected_result)));
+  });
+
+  const exportRow = el("div", { class: "export" }, el("span", {}, `Export ${suites.length} stor${suites.length === 1 ? "y" : "ies"}:`),
+    ...["csv", "json", "gherkin"].map((fmt) => {
+      const b = el("button", { class: "secondary", type: "button" }, fmt.toUpperCase());
+      b.addEventListener("click", () => download(fmt));
+      return b;
+    }));
+
+  $("#results").replaceChildren(
+    el("h2", {}, `${suite.story.key} — ${suite.story.summary}`),
+    el("p", { class: "notes" }, suite.coverage_notes),
+    exportRow,
+    el("h3", {}, "Model analysis"),
+    el("div", { class: "table-wrap" }, analysis),
+    el("h3", {}, `Test cases (${suite.test_cases.length})`),
+    ...cases);
+}
+
+async function download(fmt) {
+  try {
+    const res = await api("/api/export", { suites, format: fmt });
+    const url = URL.createObjectURL(await res.blob());
+    const a = el("a", { href: url, download: `test_cases.${fmt === "gherkin" ? "feature" : fmt}` });
+    document.body.append(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  } catch (e) { alert(e.message); }
+}
+
+// ---- model info + jira status
+api("/api/health").then((r) => r.json()).then((h) => {
+  const m = h.model, ev = m.evaluation;
+  $("#model-info").textContent = `Model trained ${m.trained_at || "?"} on ${m.training_rows} labeled requirements` +
+    (ev ? ` · cross-validated accuracy ${(ev.accuracy * 100).toFixed(0)}%, macro F1 ${(ev.macro_f1 * 100).toFixed(0)}%` : "");
+  $("#jira-status").textContent = h.jira_configured
+    ? "Jira is connected through the server's settings."
+    : "Jira is not configured on this deployment yet (the owner sets JIRA_BASE_URL, JIRA_EMAIL and JIRA_API_TOKEN).";
+  if (!h.jira_configured) $("#jira-fetch").disabled = true;
+}).catch(() => { $("#model-info").textContent = "Could not reach the API."; });
+</script>
+</body>
+</html>

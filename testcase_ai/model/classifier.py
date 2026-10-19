@@ -17,7 +17,6 @@ fitted on unlabeled acceptance criteria from real user stories as well
 
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass
 
 import numpy as np
@@ -29,21 +28,10 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import FeatureUnion
 
 from .datasets import HANDCRAFTED, is_gold
+from .heads import FOCUS_CLASSES, GENERAL, NFR_CLASSES, Prediction, combine, preprocess
 from .taxonomy import NONFUNCTIONAL
 
-NFR_CLASSES = ("security", "performance", "usability", "reliability", "compliance", "operational")
-FOCUS_CLASSES = ("validation", "boundary", "error_handling", "workflow", "notification")
-GENERAL = "general"
-FOCUS_THRESHOLD = 0.40  # minimum focus probability to replace "functional" with a focus category
-SECONDARY_THRESHOLD = 0.20  # other categories above this are reported as secondary
 GENERAL_SAMPLE = 150  # functional rows from other datasets added to the focus head as "general"
-
-
-def preprocess(text: str) -> str:
-    text = text.lower()
-    text = re.sub(r"\d+(?:[.,]\d+)?", " 9 ", text)  # all numbers look alike to the model
-    text = re.sub(r"[\"'“”‘’]", " ", text)
-    return re.sub(r"\s+", " ", text).strip()
 
 
 def build_features() -> FeatureUnion:
@@ -58,14 +46,6 @@ def build_features() -> FeatureUnion:
 
 def _head(C: float) -> LogisticRegression:
     return LogisticRegression(C=C, class_weight="balanced", max_iter=5000)
-
-
-@dataclass
-class Prediction:
-    category: str
-    confidence: float
-    secondary: list[tuple[str, float]]  # other plausible categories, most likely first
-    requirement_type: str  # "functional" or the non-functional category
 
 
 @dataclass
@@ -162,48 +142,14 @@ class RequirementClassifier:
     def predict(self, texts: list[str]) -> list[Prediction]:
         if not texts:
             return []
-        type_p = self.type_head.predict_proba(self.type_features.transform(texts))
-        type_cls = list(self.type_head.classes_)
-        t_func = type_p[:, type_cls.index("functional")]
+        type_p = self.type_head.predict_proba(self.type_features.transform(texts)).tolist()
+        focus_p = self.focus_head.predict_proba(self.focus_features.transform(texts)).tolist()
+        kind_func = None
         if self.kind_weight > 0:
-            kind_p = self.kind_head.predict_proba(self.kind_features.transform(texts))[
-                :, list(self.kind_head.classes_).index("functional")]
-            p_funcs = (1 - self.kind_weight) * t_func + self.kind_weight * kind_p
-        else:
-            p_funcs = t_func
-        nfr_cls = [c for c in type_cls if c != "functional"]
-        nfr_idx = [type_cls.index(c) for c in nfr_cls]
-        nfr = type_p[:, nfr_idx]
-        nfr = nfr / np.clip(nfr.sum(axis=1, keepdims=True), 1e-9, None)
-        focus = self.focus_head.predict_proba(self.focus_features.transform(texts))
-        focus_cls = list(self.focus_head.classes_)
-
-        out = []
-        for p_func, np_, fp in zip(p_funcs, nfr, focus):
-            scores = {c: (1 - p_func) * p for c, p in zip(nfr_cls, np_)}
-            for c, p in zip(focus_cls, fp):
-                scores["functional" if c == GENERAL else c] = p_func * p
-
-            if p_func >= 0.5:
-                req_type = "functional"
-                best = int(np.argmax(fp))
-                if focus_cls[best] != GENERAL and fp[best] >= FOCUS_THRESHOLD:
-                    category, confidence = focus_cls[best], float(fp[best] * p_func)
-                else:
-                    category, confidence = "functional", float(p_func)
-            else:
-                best = int(np.argmax(np_))
-                req_type = category = nfr_cls[best]
-                confidence = float(np_[best] * (1 - p_func))
-
-            ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
-            secondary = [(c, float(p)) for c, p in ranked if c != category and p >= SECONDARY_THRESHOLD]
-            # Focus areas count as secondary on their own probability too (they refine "functional").
-            for c, p in zip(focus_cls, fp):
-                if c not in (GENERAL, category) and p >= SECONDARY_THRESHOLD and c not in dict(secondary):
-                    secondary.append((c, float(p)))
-            out.append(Prediction(category, confidence, secondary, req_type))
-        return out
+            kind_p = self.kind_head.predict_proba(self.kind_features.transform(texts))
+            kind_func = kind_p[:, list(self.kind_head.classes_).index("functional")].tolist()
+        return combine(list(self.type_head.classes_), type_p, list(self.focus_head.classes_), focus_p,
+                       kind_func, self.kind_weight)
 
     # --------------------------------------------------------------- evaluation
     def evaluate(self, data: pd.DataFrame, unlabeled: list[str] | None = None, folds: int = 5) -> EvaluationReport:
