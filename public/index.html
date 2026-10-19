@@ -76,6 +76,14 @@
   .case-body p { margin: 6px 0; }
   .export { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
   .export span { color: var(--quiet); font-size: 13px; }
+  details.advanced { margin-top: 12px; font-size: 14px; }
+  details.advanced summary { cursor: pointer; color: var(--quiet); }
+  .jira-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .jira-actions span { display: block; font-size: 13.5px; color: var(--quiet); }
+  .jira-actions button.primary { margin-top: 8px; }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover td { background: var(--accent-soft); }
+  .back { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; margin-bottom: 8px; }
   footer { max-width: 1280px; margin: 0 auto; padding: 0 24px 24px; color: var(--quiet); font-size: 12.5px; }
 </style>
 </head>
@@ -122,12 +130,20 @@
 
     <div data-panel="jira" hidden>
       <p class="hint" id="jira-status">Checking Jira connection…</p>
-      <label for="jira-keys">Issue keys</label>
-      <input id="jira-keys" placeholder="PROJ-123, PROJ-124">
-      <label for="jira-jql">or JQL</label>
-      <input id="jira-jql" placeholder="project = PROJ AND issuetype = Story">
-      <button class="secondary" id="jira-fetch" style="margin-top:10px">Fetch stories</button>
+      <button class="primary" id="jira-all" type="button">Pull all stories from Jira</button>
+      <details class="advanced">
+        <summary>Advanced: specific issue keys or a JQL query</summary>
+        <label for="jira-keys">Issue keys</label>
+        <input id="jira-keys" placeholder="PROJ-123, PROJ-124">
+        <label for="jira-jql">or JQL</label>
+        <input id="jira-jql" placeholder="project = PROJ AND issuetype = Story">
+        <button class="secondary" id="jira-fetch" type="button" style="margin-top:10px">Fetch these stories</button>
+      </details>
       <div class="error" id="jira-error" role="alert"></div>
+      <div class="jira-actions" id="jira-actions" hidden>
+        <span id="jira-count"></span>
+        <button class="primary" id="gen-all" type="button">Generate test cases for all</button>
+      </div>
       <div class="list" id="jira-list"></div>
     </div>
   </section>
@@ -197,14 +213,77 @@ $("#load-samples").addEventListener("click", async () => {
 });
 
 // ---- jira
-$("#jira-fetch").addEventListener("click", async () => {
+let jiraStories = [];
+
+function showJiraStories(stories) {
+  jiraStories = stories;
+  storyList($("#jira-list"), stories);
+  $("#jira-count").textContent = stories.length
+    ? `${stories.length} stor${stories.length === 1 ? "y" : "ies"} pulled from Jira. Pick one to edit it, or:`
+    : "No stories found in Jira.";
+  $("#gen-all").hidden = !stories.length;
+  $("#jira-actions").hidden = false;
+}
+
+async function pullJira(body, button) {
   $("#jira-error").textContent = "";
+  const label = button.textContent;
+  button.disabled = true; button.textContent = "Pulling from Jira…";
+  try { showJiraStories(await (await api("/api/jira/stories", body)).json()); }
+  catch (e) { $("#jira-error").textContent = e.message; }
+  finally { button.disabled = false; button.textContent = label; }
+}
+
+$("#jira-all").addEventListener("click", (e) => pullJira({}, e.currentTarget));
+$("#jira-fetch").addEventListener("click", (e) => {
   const keys = $("#jira-keys").value.split(/[\s,]+/).filter(Boolean);
   const jql = $("#jira-jql").value.trim();
-  try {
-    storyList($("#jira-list"), await (await api("/api/jira/stories", keys.length ? { keys } : { jql })).json());
-  } catch (e) { $("#jira-error").textContent = e.message; }
+  if (!keys.length && !jql) { $("#jira-error").textContent = "Enter issue keys or a JQL query, or use Pull all stories."; return; }
+  pullJira(keys.length ? { keys } : { jql }, e.currentTarget);
 });
+
+$("#gen-all").addEventListener("click", async (e) => {
+  const btn = e.currentTarget, maxCases = Number($("#max-cases").value);
+  btn.disabled = true; $("#jira-error").textContent = "";
+  const failed = [];
+  for (const [n, story] of jiraStories.entries()) {
+    btn.textContent = `Generating ${n + 1} / ${jiraStories.length}…`;
+    try {
+      const suite = await (await api("/api/generate", { story: toStoryIn(story), max_cases: maxCases })).json();
+      const i = suites.findIndex((s) => s.story.key === suite.story.key);
+      if (i >= 0) suites[i] = suite; else suites.push(suite);
+    } catch (err) { failed.push(`${story.key}: ${err.message}`); }
+  }
+  btn.disabled = false; btn.textContent = "Generate test cases for all";
+  if (failed.length) $("#jira-error").textContent = `Could not generate for ${failed.length}: ${failed.join("; ")}`;
+  renderOverview();
+});
+
+function toStoryIn(s) {
+  return { key: (s.key || "STORY-1").slice(0, 64), summary: (s.summary || s.key || "Untitled").slice(0, 1000),
+           description: (s.description || "").slice(0, 20000),
+           acceptance_criteria: (s.acceptance_criteria || "").slice(0, 20000), priority: s.priority || null };
+}
+
+function renderOverview() {
+  const total = suites.reduce((n, s) => n + s.test_cases.length, 0);
+  const table = el("table", {},
+    el("thead", {}, el("tr", {}, ["Story", "Summary", "Criteria", "Test cases"].map((h) => el("th", {}, h)))),
+    el("tbody", {}, suites.map((suite) => {
+      const row = el("tr", { class: "clickable", tabindex: "0" },
+        el("td", {}, el("b", {}, suite.story.key)), el("td", {}, suite.story.summary),
+        el("td", {}, String(suite.insights.length)), el("td", {}, String(suite.test_cases.length)));
+      const open = () => render(suite);
+      row.addEventListener("click", open);
+      row.addEventListener("keydown", (ev) => { if (ev.key === "Enter") open(); });
+      return row;
+    })));
+  $("#results").replaceChildren(
+    el("h2", {}, `${suites.length} stories · ${total} test cases`),
+    el("p", { class: "notes" }, "Click a story to see its model analysis and test cases."),
+    exportButtons(),
+    el("div", { class: "table-wrap" }, table));
+}
 
 // ---- generate
 $("#story-form").addEventListener("submit", async (e) => {
@@ -250,21 +329,27 @@ function render(suite) {
         el("p", {}, el("b", {}, "Expected result: "), tc.expected_result)));
   });
 
-  const exportRow = el("div", { class: "export" }, el("span", {}, `Export ${suites.length} stor${suites.length === 1 ? "y" : "ies"}:`),
+  const back = el("button", { class: "back", type: "button" }, `← All ${suites.length} stories`);
+  back.addEventListener("click", renderOverview);
+
+  $("#results").replaceChildren(
+    ...(suites.length > 1 ? [back] : []),
+    el("h2", {}, `${suite.story.key} — ${suite.story.summary}`),
+    el("p", { class: "notes" }, suite.coverage_notes),
+    exportButtons(),
+    el("h3", {}, "Model analysis"),
+    el("div", { class: "table-wrap" }, analysis),
+    el("h3", {}, `Test cases (${suite.test_cases.length})`),
+    ...cases);
+}
+
+function exportButtons() {
+  return el("div", { class: "export" }, el("span", {}, `Export ${suites.length} stor${suites.length === 1 ? "y" : "ies"}:`),
     ...["csv", "json", "gherkin"].map((fmt) => {
       const b = el("button", { class: "secondary", type: "button" }, fmt.toUpperCase());
       b.addEventListener("click", () => download(fmt));
       return b;
     }));
-
-  $("#results").replaceChildren(
-    el("h2", {}, `${suite.story.key} — ${suite.story.summary}`),
-    el("p", { class: "notes" }, suite.coverage_notes),
-    exportRow,
-    el("h3", {}, "Model analysis"),
-    el("div", { class: "table-wrap" }, analysis),
-    el("h3", {}, `Test cases (${suite.test_cases.length})`),
-    ...cases);
 }
 
 async function download(fmt) {
@@ -284,7 +369,7 @@ api("/api/health").then((r) => r.json()).then((h) => {
   $("#jira-status").textContent = h.jira_configured
     ? "Jira is connected through the server's settings."
     : "Jira is not configured on this deployment yet (the owner sets JIRA_BASE_URL, JIRA_EMAIL and JIRA_API_TOKEN).";
-  if (!h.jira_configured) $("#jira-fetch").disabled = true;
+  if (!h.jira_configured) { $("#jira-fetch").disabled = true; $("#jira-all").disabled = true; }
 }).catch(() => { $("#model-info").textContent = "Could not reach the API."; });
 </script>
 </body>

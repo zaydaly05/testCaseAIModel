@@ -59,9 +59,11 @@ class ExportIn(BaseModel):
 
 
 class JiraIn(BaseModel):
+    """Issue keys, or a JQL query, or neither to pull every story (see JiraSettings.all_stories_jql)."""
+
     keys: list[str] = Field(default_factory=list, max_length=50)
     jql: str | None = Field(None, max_length=2000)
-    limit: int = Field(20, ge=1, le=100)
+    limit: int = Field(200, ge=1, le=500)
 
 
 @app.get("/api/health")
@@ -107,13 +109,13 @@ def jira_stories(body: JiraIn) -> list[UserStory]:
     settings = JiraSettings.from_env()
     if not settings.is_configured:
         raise HTTPException(503, "Jira is not configured on the server (set JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN).")
-    if not body.keys and not body.jql:
-        raise HTTPException(422, "Give issue keys or a JQL query.")
     try:
         client = JiraClient(settings)
         if body.keys:
             return [client.get_story(k) for k in body.keys]
-        return client.search_stories(body.jql, body.limit)
+        return client.search_stories(body.jql or settings.all_stories_jql(), body.limit)
+    except ValueError as exc:
+        raise HTTPException(500, str(exc)) from exc
     except JiraError as exc:
         raise HTTPException(502, str(exc)) from exc
 

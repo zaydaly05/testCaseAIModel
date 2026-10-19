@@ -113,6 +113,9 @@ so the deployment runs the **portable model**: the same trained classifier expor
 3. Optional, for the Jira tab: add `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN`
    (and `JIRA_ACCEPTANCE_CRITERIA_FIELD`) as environment variables in the Vercel project.
    The token stays on the server; the page never sees it.
+   **Pull all stories from Jira** fetches every issue of type Story (up to 200, newest first).
+   Set `JIRA_PROJECT_KEY` to limit it to one project, or `JIRA_DEFAULT_JQL` to use your own query.
+   **Generate test cases for all** then runs the model on every pulled story and exports them together.
 
 Run the deployed version locally: `uvicorn api.index:app --reload`, then open http://127.0.0.1:8000.
 

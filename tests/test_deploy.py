@@ -86,3 +86,28 @@ def test_api_samples(client):
 
 def test_artifact_is_committed():
     assert PORTABLE_PATH.exists() and PORTABLE_PATH.stat().st_size < 10_000_000
+
+
+def test_all_stories_jql():
+    from testcase_ai.config import JiraSettings
+    assert JiraSettings().all_stories_jql() == "issuetype = Story ORDER BY created DESC"
+    assert JiraSettings(project_key="SHOP").all_stories_jql() == "project = SHOP AND issuetype = Story ORDER BY created DESC"
+    assert JiraSettings(project_key="SHOP", default_jql="project = X").all_stories_jql() == "project = X"
+    with pytest.raises(ValueError):
+        JiraSettings(project_key="SHOP OR 1=1").all_stories_jql()
+
+
+def test_api_pull_all_stories(client, monkeypatch):
+    import responses
+
+    base = "https://example.atlassian.net"
+    monkeypatch.setenv("JIRA_BASE_URL", base)
+    monkeypatch.setenv("JIRA_EMAIL", "a@b.c")
+    monkeypatch.setenv("JIRA_API_TOKEN", "tok")
+    monkeypatch.setenv("JIRA_PROJECT_KEY", "SHOP")
+    with responses.RequestsMock() as rsps:
+        rsps.get(f"{base}/rest/api/3/search/jql",
+                 json={"issues": [{"key": f"SHOP-{i}", "fields": {"summary": f"Story {i}"}} for i in (1, 2)], "isLast": True})
+        stories = client.post("/api/jira/stories", json={}).json()
+        assert "project+%3D+SHOP+AND+issuetype+%3D+Story" in rsps.calls[0].request.url
+    assert [s["key"] for s in stories] == ["SHOP-1", "SHOP-2"]
