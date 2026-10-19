@@ -10,10 +10,9 @@ Heads (each a logistic regression on the same TF-IDF features):
             validation, boundary, error handling, workflow, notification,
             or "general" for plain functional behaviour.
 
-The TF-IDF vocabulary (word + character n-grams) is fitted on the labeled
-texts *and* on unlabeled acceptance criteria from real user stories, so the
-model also knows the vocabulary of story-style requirements (semi-supervised
-feature learning).
+Each head has its own TF-IDF vocabulary (word + character n-grams), optionally
+fitted on unlabeled acceptance criteria from real user stories as well
+(semi-supervised feature learning).
 """
 
 from __future__ import annotations
@@ -106,20 +105,27 @@ class RequirementClassifier:
     """
 
     def __init__(self, C: float = 8.0, seed: int = 42, kind_weight: float = 0.0, weak_weight: float = 0.3,
-                 general_sample: int = GENERAL_SAMPLE):
+                 general_sample: int = GENERAL_SAMPLE, use_unlabeled: bool = True):
         self.C = C
         self.seed = seed
         self.kind_weight = kind_weight
         self.weak_weight = weak_weight
         self.general_sample = general_sample
-        self.features = build_features()
+        self.use_unlabeled = use_unlabeled
+        # Each head has its own vocabulary: a small head (focus) picks out its key terms better.
+        self.type_features, self.kind_features, self.focus_features = build_features(), build_features(), build_features()
         self.type_head = _head(C)  # functional + the non-functional categories
         self.kind_head = _head(C)  # functional vs non-functional
         self.focus_head = _head(C)
 
     def _params(self) -> dict:
         return dict(C=self.C, seed=self.seed, kind_weight=self.kind_weight, weak_weight=self.weak_weight,
-                    general_sample=self.general_sample)
+                    general_sample=self.general_sample, use_unlabeled=self.use_unlabeled)
+
+    def _fit_head(self, features: FeatureUnion, head: LogisticRegression, texts: pd.Series, labels,
+                  unlabeled: list[str], sample_weight=None) -> None:
+        features.fit(pd.concat([texts, pd.Series(unlabeled, dtype=object)]))
+        head.fit(features.transform(texts), labels, sample_weight=sample_weight)
 
     # ------------------------------------------------------------------ training
     def _weights(self, rows: pd.DataFrame) -> np.ndarray:
@@ -135,31 +141,32 @@ class RequirementClassifier:
 
     def fit(self, data: pd.DataFrame, unlabeled: list[str] | None = None) -> "RequirementClassifier":
         """`data` needs columns text, category and source (see datasets.load_training_data)."""
-        self.features.fit(pd.concat([data["text"], pd.Series(unlabeled or [], dtype=object)]))
+        unlabeled = (unlabeled or []) if self.use_unlabeled else []
 
         typed = data[data["category"] != NONFUNCTIONAL]
         type_labels = typed["category"].where(typed["category"].isin(NFR_CLASSES), "functional")
-        self.type_head.fit(self.features.transform(typed["text"]), type_labels, sample_weight=self._weights(typed))
+        self._fit_head(self.type_features, self.type_head, typed["text"], type_labels, unlabeled, self._weights(typed))
 
         if self.kind_weight > 0:
             is_nfr = data["category"].isin(NFR_CLASSES + (NONFUNCTIONAL,))
-            self.kind_head.fit(self.features.transform(data["text"]), np.where(is_nfr, NONFUNCTIONAL, "functional"),
-                               sample_weight=np.where(data["source"] == "fr_nfr_requirements.csv", self.weak_weight, 1.0))
+            self._fit_head(self.kind_features, self.kind_head, data["text"],
+                           np.where(is_nfr, NONFUNCTIONAL, "functional"), unlabeled,
+                           np.where(data["source"] == "fr_nfr_requirements.csv", self.weak_weight, 1.0))
 
         focus = self._focus_rows(data)
-        self.focus_head.fit(self.features.transform(focus["text"]), focus["category"])
+        self._fit_head(self.focus_features, self.focus_head, focus["text"], focus["category"], unlabeled)
         return self
 
     # ---------------------------------------------------------------- inference
     def predict(self, texts: list[str]) -> list[Prediction]:
         if not texts:
             return []
-        X = self.features.transform(texts)
-        type_p = self.type_head.predict_proba(X)
+        type_p = self.type_head.predict_proba(self.type_features.transform(texts))
         type_cls = list(self.type_head.classes_)
         t_func = type_p[:, type_cls.index("functional")]
         if self.kind_weight > 0:
-            kind_p = self.kind_head.predict_proba(X)[:, list(self.kind_head.classes_).index("functional")]
+            kind_p = self.kind_head.predict_proba(self.kind_features.transform(texts))[
+                :, list(self.kind_head.classes_).index("functional")]
             p_funcs = (1 - self.kind_weight) * t_func + self.kind_weight * kind_p
         else:
             p_funcs = t_func
@@ -167,7 +174,7 @@ class RequirementClassifier:
         nfr_idx = [type_cls.index(c) for c in nfr_cls]
         nfr = type_p[:, nfr_idx]
         nfr = nfr / np.clip(nfr.sum(axis=1, keepdims=True), 1e-9, None)
-        focus = self.focus_head.predict_proba(X)
+        focus = self.focus_head.predict_proba(self.focus_features.transform(texts))
         focus_cls = list(self.focus_head.classes_)
 
         out = []
