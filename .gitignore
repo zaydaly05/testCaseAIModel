@@ -5,3 +5,6 @@ venv/
 .env
 .pytest_cache/
 .streamlit/secrets.toml
+
+# trained model, review corrections and uploaded datasets stay local
+models/

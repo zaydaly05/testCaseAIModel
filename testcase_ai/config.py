@@ -9,8 +9,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DEFAULT_MODEL = "claude-opus-5-5"
-
 
 @dataclass
 class JiraSettings:
@@ -34,15 +32,3 @@ class JiraSettings:
     def is_configured(self) -> bool:
         return bool(self.base_url and self.api_token)
 
-
-@dataclass
-class AISettings:
-    model: str = DEFAULT_MODEL
-    effort: str = "medium"
-
-    @classmethod
-    def from_env(cls) -> "AISettings":
-        return cls(
-            model=os.getenv("TESTCASE_AI_MODEL", DEFAULT_MODEL),
-            effort=os.getenv("TESTCASE_AI_EFFORT", "medium"),
-        )

@@ -1,0 +1,362 @@
+[
+  {
+    "key": "OPS-684",
+    "summary": "The banking system to have low or no fees",
+    "description": "As a student with limited income, I want the banking system to have low or no fees, so that I can save money and not be charged unnecessary costs.",
+    "acceptance_criteria": "1. The banking system should clearly display all applicable fees and charges, and provide an easy-to-understand breakdown of how they are calculated.\n2. The banking system should offer fee waivers or reduced fees for students who meet certain eligibility criteria, such as maintaining a minimum account balance or enrolling in a specific program.\n3. The banking system should have no hidden fees, and any changes to fees or charges should be communicated clearly and in advance.\n4. The banking system should offer easy-to-use budgeting tools and resources to help students manage their finances effectively and avoid unnecessary fees.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "HR-277",
+    "summary": "The banking system to offer convenient online and mobile banking...",
+    "description": "As a busy professional, I want the banking system to offer convenient online and mobile banking options, so that I can manage my finances on-the-go and save time.",
+    "acceptance_criteria": "AC1: The online and mobile banking interfaces should be easy to navigate and user-friendly.\nAC2: Transactions should be processed quickly and accurately through online and mobile banking.\nAC3: The mobile app should have push notifications for account activity and updates.\nAC4: The online and mobile banking platforms should be available 24/7 for maximum convenience.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "CRM-120",
+    "summary": "Monitor website traffic and sales data",
+    "description": "As an administrator, I want to be able to monitor website traffic and sales data, so that I can make informed decisions about the store's operations and marketing strategies.",
+    "acceptance_criteria": "- The website has a system for tracking website traffic and sales data.\n- The administrator can access reports on website traffic, including page views, unique visitors, and referral sources.\n- The administrator can track sales data, including revenue, order volume, and product performance.\n- The administrator can use this data to make informed decisions about the store's operations, marketing strategies, and product offerings.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "HR-221",
+    "summary": "Search for specific medications by name or category",
+    "description": "As a customer, I want to be able to search for specific medications by name or category, so that I can quickly find what I need.",
+    "acceptance_criteria": "1. The search bar should be clearly visible on the website/app interface.\n2. The search results should be accurate and relevant to the search query.\n3. The search functionality should be able to search for medications by name or category.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "LIB-654",
+    "summary": "Receive reminders about taking my medication, including dosage...",
+    "description": "As a customer, I want to be able to receive reminders about taking my medication, including dosage instructions and potential side effects.",
+    "acceptance_criteria": "1. The customer should be able to receive reminders about taking their medication, including dosage instructions and potential side effects.\n2. Reminders should be sent through email or push notification, according to the customer's preference.\n3. The frequency and content of reminders should be customizable by the customer.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "LIB-173",
+    "summary": "Analyze player performance and provide feedback and advice",
+    "description": "As a cricket coach, I want to be able to analyze player performance and provide feedback and advice, so that I can help them improve their skills.",
+    "acceptance_criteria": "1. The website should have a section for analyzing player performance.\n2. The coach should be able to view each player's statistics and performance history.\n3. The coach should be able to provide feedback and advice to players through the website, such as through a messaging system or comments on specific statistics.\n4. The coach should be able to create customized training plans for individual players based on their performance data.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "EDU-557",
+    "summary": "View high-quality images and videos of electronic gadgets",
+    "description": "As a user, I want to be able to view high-quality images and videos of electronic gadgets, so that I can get a clear idea of what the product looks like and how it works.",
+    "acceptance_criteria": "AC1: Images and videos should be of high quality and clearly show the product.\nAC2: The images and videos should accurately represent the product's color, size, and other features.\nAC3: The media should be displayed on a user-friendly platform that is easy to access and navigate.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "MED-653",
+    "summary": "View the train's fare chart and compare the fares for different train...",
+    "description": "As a user, I want to be able to view the train's fare chart and compare the fares for different train classes, so that I can choose the most cost-effective option for my travel.",
+    "acceptance_criteria": "AC1: The fare chart is displayed clearly and accurately.\nAC2: Users can easily compare the fares for different train classes and coaches.\nAC3: The fare chart includes information about any discounts or special offers.\nAC4: The fare chart is updated regularly to reflect any changes in fares or discounts.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "PAY-775",
+    "summary": "Search for my favorite artists and songs",
+    "description": "As a music listener, I want to be able to search for my favorite artists and songs, so that I can easily find and play the music I love.",
+    "acceptance_criteria": "1. The search bar is prominently displayed on the home screen.\n2. The search results show both artists and songs related to the search query.\n3. The search results are accurate and relevant to the search query.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "OPS-38",
+    "summary": "Receive weather alerts that are available in multiple languages",
+    "description": "As a user, I want to receive weather alerts that are available in multiple languages.",
+    "acceptance_criteria": "AC1: The weather alerts should be available in multiple languages to accommodate users who speak languages other than English.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "HR-225",
+    "summary": "Modify or cancel my rental reservation if needed",
+    "description": "As a user, I want to be able to modify or cancel my rental reservation if needed.",
+    "acceptance_criteria": "AC1: The website should allow me to modify or cancel my reservation easily from my account dashboard.\nAC2: The website should clearly state the cancellation and modification policy.\nAC3: I should receive a confirmation email if I modify or cancel my reservation.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "BANK-26",
+    "summary": "Assess candidates' skills and qualifications",
+    "description": "As a recruiter, I want to be able to assess candidates' skills and qualifications.",
+    "acceptance_criteria": "AC1: The platform must have tools for assessing candidates' skills, such as coding challenges or personality tests.\nAC2: Recruiters must be able to view candidates' resumes and cover letters.\nAC3: Recruiters must be able to conduct interviews through the platform.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "SHOP-921",
+    "summary": "Set up a customized investment plan based on my goals and risk...",
+    "description": "As a user, I want to be able to set up a customized investment plan based on my goals and risk tolerance so that I can achieve my desired returns.",
+    "acceptance_criteria": "1. The user is able to access a tool or questionnaire to determine their investment goals and risk tolerance.\n2. The tool or questionnaire provides personalized recommendations for asset allocation and investment strategies.\n3. The user is able to customize their investment plan based on their preferences and priorities.\n4. The user is able to track their progress towards their investment goals and modify their plan as needed.\n5. The investment plan is designed to maximize returns while minimizing risk and volatility.\n6. User stories for Education and Learning Management System",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "OPS-289",
+    "summary": "Track my daily water intake",
+    "description": "As a user, I want to track my daily water intake so that I can ensure I am drinking enough water.",
+    "acceptance_criteria": "* The app should allow the user to input the amount of water they drink each day.\n* The app should display the user's daily water intake in a clear and easy-to-read format.\n* The app should provide the user with reminders to drink water throughout the day.\n* The user should be able to set a daily water intake goal.\n* The app should provide feedback to the user on their progress towards their goal.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "HR-190",
+    "summary": "View my account balance online",
+    "description": "As a bank customer, I want to be able to view my account balance online, so that I can keep track of my finances.",
+    "acceptance_criteria": "* The system should display the current balance of the customer's account when they log in.\n* The balance displayed should be accurate and up-to-date, reflecting the most recent transactions.\n* The system should only display the balance of the account associated with the customer's login credentials, and not any other accounts.\n* The system should provide a secure login process to ensure the confidentiality and privacy of the customer's account information.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "PAY-367",
+    "summary": "The banking system to offer a mobile app with a user-friendly...",
+    "description": "As a busy professional who values time and convenience, I want the banking system to offer a mobile app with a user-friendly interface, real-time notifications for transactions and account balances, easy-to-use bill payment options, and the ability to deposit checks using my smartphone so that I can manage my finances on-the-go.",
+    "acceptance_criteria": "- The mobile app should have a simple and intuitive interface with clear navigation and easily accessible features.\n- Real-time notifications for transactions and account balances should be provided to keep the user informed.\n- Bill payment options should be easy to use with the ability to set up recurring payments if needed.\n- The mobile app should have a feature that allows users to deposit checks using their smartphones for added convenience.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "CRM-703",
+    "summary": "View real-time updates on my child's school bus location and...",
+    "description": "As a parent, I want to be able to view real-time updates on my child's school bus location and estimated arrival time, so that I can plan for pick-up and drop-off.",
+    "acceptance_criteria": "AC1: The real-time location of the school bus should be accurate and updated frequently.\nAC2: The estimated arrival time should be provided based on the real-time location of the school bus and traffic conditions.\nAC3: The system should send notifications to parents when the school bus is delayed or changes its route.\nAC4: The system should be easily accessible on mobile devices and have user-friendly interface for parents to use.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "LIB-571",
+    "summary": "Easily manage and track library equipment, such as laptops...",
+    "description": "As a librarian, I want to be able to easily manage and track library equipment, such as laptops, projectors, and other technology, so that we can ensure efficient and effective use of resources.",
+    "acceptance_criteria": "* The library equipment inventory system should allow librarians to easily input information on new equipment, including make, model, and purchase date.\n* The system should provide an up-to-date record of all checked-out equipment, including the name of the borrower, the date checked out, and the due date.\n* The system should generate automatic reminders to borrowers when equipment is due for return, and send notifications to librarians when equipment is overdue or damaged.\n* The system should be accessible to librarians from any location, with the ability to update and track equipment information remotely.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "HR-724",
+    "summary": "Manage and track the store's loyalty program and rewards",
+    "description": "As a supermarket manager, I want to be able to manage and track the store's loyalty program and rewards, so that I can promote customer retention and engagement.",
+    "acceptance_criteria": "* Ability to create and manage loyalty program accounts for customers, including tracking points, rewards, and expiration dates.\n* Option for customers to easily sign up for the loyalty program, whether in-store or online.\n* Capability to analyze and track customer behavior and purchases through the loyalty program data, to identify trends and opportunities for personalized promotions.\n* Integration with the store's point of sale system, so that loyalty rewards and discounts can be automatically applied at checkout.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "BANK-42",
+    "summary": "Manage and track the store's waste and environmental impact",
+    "description": "As a supermarket manager, I want to be able to manage and track the store's waste and environmental impact, so that I can promote sustainable practices and reduce costs.",
+    "acceptance_criteria": "* The system should allow the manager to track the types and amounts of waste generated by the store.\n* The system should allow the manager to analyze the store's energy and resource usage and identify areas where improvements can be made.\n* The system should provide tools for the manager to implement and monitor sustainable practices, such as recycling programs or energy-efficient lighting.\n* The system should generate reports on the store's environmental impact and progress towards sustainability goals.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "HR-875",
+    "summary": "Manage and track the store's social media and online presence",
+    "description": "As a supermarket manager, I want to be able to manage and track the store's social media and online presence, so that I can engage with customers and promote the store's brand.",
+    "acceptance_criteria": "1. The social media and online presence management system should allow the supermarket manager to schedule and publish posts across multiple platforms, such as Facebook, Twitter, and Instagram.\n2. The system should provide analytics and reporting tools to track engagement and performance of social media posts and online campaigns.\n3. The system should allow the supermarket manager to respond to customer inquiries, feedback, and reviews on social media and other online channels in a timely and professional manner.\n4. The system should enable the supermarket manager to monitor online conversations and trends related to the supermarket's brand, competitors, and industry, and use this information to inform business decisions and marketing strategies.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "CRM-220",
+    "summary": "Easily communicate with candidates and provide timely updates on the...",
+    "description": "As a recruiter, I want to be able to easily communicate with candidates and provide timely updates on the recruitment process, so that we can build positive relationships with potential hires.",
+    "acceptance_criteria": "AC1: The communication platform should be easily accessible and user-friendly for both the recruiter and the candidate.\nAC2: The recruiter should be able to send messages and updates to candidates regarding the status of their application and next steps in the recruitment process.\nAC3: The candidate should be able to easily reply and respond to messages from the recruiter.\nAC4: The platform should have a record of all communication between the recruiter and candidate for reference and documentation purposes.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "OPS-318",
+    "summary": "Easily return or exchange products",
+    "description": "As a customer, I want to be able to easily return or exchange products, so that I can be satisfied with my purchases.",
+    "acceptance_criteria": "- Customer can initiate a return or exchange through their account or by contacting customer service.\n- Customer can select the reason for the return or exchange and provide additional details if necessary.\n- Customer can track the status of their return or exchange, including when the item is received and when the refund or replacement is processed.\n- Customer receives clear instructions on how to package and ship the item back.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "PAY-279",
+    "summary": "View my medical test reports and prescription history online",
+    "description": "As a patient, I want to be able to view my medical test reports and prescription history online, so that I can easily track my health progress.",
+    "acceptance_criteria": "- The user should be able to access their medical test reports and prescription history through a secure online portal.\n- The information should be displayed in a clear and easy-to-understand format.\n- The user should be able to download and print the reports if necessary.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "TRIP-751",
+    "summary": "Schedule follow-up appointments with healthcare professionals",
+    "description": "As a patient, I want to be able to schedule follow-up appointments with healthcare professionals, so that I can continue to receive treatment and care.",
+    "acceptance_criteria": "1. Patient can access the appointment scheduling system online.\n2. Patient can view the availability of healthcare professionals and select a preferred date and time for their follow-up appointment.\n3. Patient receives a confirmation of the appointment and any relevant instructions or preparation needed.\n4. Healthcare professional is notified of the scheduled appointment and has access to the patient's medical record.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "OPS-604",
+    "summary": "Track user feedback and feature requests",
+    "description": "As a product manager, I want to be able to track user feedback and feature requests, so that I can prioritize and plan the product roadmap.",
+    "acceptance_criteria": "- User feedback and feature requests are collected and organized in a centralized location.\n- The product manager can easily review and prioritize user feedback and feature requests.\n- The product roadmap is updated to reflect changes based on user feedback and feature requests.\n- The product manager can communicate any changes to the development team in a timely manner.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "TRIP-349",
+    "summary": "Compare prices and reviews for different medications",
+    "description": "As a customer, I want to be able to compare prices and reviews for different medications, so that I can make an informed purchase decision.",
+    "acceptance_criteria": "* Medication price and review comparison:\n* The price and review comparison functionality should be easy to use and clearly visible on the website/app interface.\n* The prices and reviews should be accurate and up-to-date.\n* Customers should be able to compare prices and reviews for different medications side-by-side.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "CRM-110",
+    "summary": "Select different shipping options, including express and overnight...",
+    "description": "As a customer, I want to be able to select different shipping options, including express and overnight delivery, so that I can receive my medications as quickly as possible.",
+    "acceptance_criteria": "* The customer should be able to select from a range of shipping options, including express and overnight delivery.\n* The cost and estimated delivery time for each shipping option should be displayed during the checkout process.\n* The selected shipping option should be displayed on the order confirmation page.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "OPS-460",
+    "summary": "Specify the coverage criteria (e.g., statement coverage, branch...",
+    "description": "As a developer, I want to be able to specify the coverage criteria (e.g., statement coverage, branch coverage, path coverage) for automatic testcase generation, so that the generated test cases can achieve the desired level of coverage.",
+    "acceptance_criteria": "* The system should allow selecting the coverage criteria for automatic testcase generation, such as statement coverage, branch coverage, and path coverage.\n* The system should provide feedback on the achieved coverage level for each criterion, and highlight any uncovered or unreachable code.\n* The system should prioritize the generated test cases based on the coverage criteria, and present them in a meaningful order.\n* The system should allow adjusting the coverage criteria and goals, and re-generating test cases accordingly.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "SHOP-325",
+    "summary": "Generate test cases that can be easily reviewed and approved by other...",
+    "description": "As a tester, I want to be able to generate test cases that can be easily reviewed and approved by other team members, so that we can ensure that the testing is thorough and comprehensive.",
+    "acceptance_criteria": "* The tool should generate test cases that are easy to read and understand by other team members.\n* The generated test cases should accurately reflect the functionality and behavior of the software.\n* The tool should provide clear and concise documentation on how to execute and interpret the test cases.\n* The tool should allow for collaboration and feedback from other team members during the test case generation process.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "HR-148",
+    "summary": "Browse electronic gadgets by category",
+    "description": "As a user, I want to be able to browse electronic gadgets by category, so that I can easily find what I am looking for.",
+    "acceptance_criteria": "1. User should be able to easily navigate to the category section from the homepage.\n2. All relevant electronic gadget categories should be included and easily accessible.\n3. The category page should display clear and organized product listings.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "BANK-826",
+    "summary": "Add electronic gadgets to my wishlist",
+    "description": "As a user, I want to be able to add electronic gadgets to my wishlist, so that I can keep track of products I am interested in buying.",
+    "acceptance_criteria": "- The website should allow users to add electronic gadgets to their wishlist by clicking on a \"Add to Wishlist\" button.\n- The wishlist should be easily accessible from the user's account page.\n- Users should be able to remove items from their wishlist or move them to their shopping cart with ease.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "PAY-859",
+    "summary": "Track the status of my train tickets",
+    "description": "As a user, I want to be able to track the status of my train tickets, so that I can stay updated on any changes or delays.",
+    "acceptance_criteria": "- The system should provide real-time updates about the train status, including any delays or cancellations.\n- The user should receive notifications about any changes in the train status.\n- The system should provide alternative travel options in case of train cancellation or delay.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "EDU-346",
+    "summary": "View the fare rules and refund policies",
+    "description": "As a user, I want to be able to view the fare rules and refund policies, so that I can make informed booking decisions.",
+    "acceptance_criteria": "* The system should provide the fare rules and refund policies for the selected ticket.\n* The user should be able to access the information from the website or mobile app.\n* The information should include the ticket cancellation policy, refund amount, and other details.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "MED-310",
+    "summary": "Access resources and information about the homebuying process, such...",
+    "description": "As a homebuyer, I want to be able to access resources and information about the homebuying process, such as guides and FAQs, so that I can educate myself and make informed decisions.",
+    "acceptance_criteria": "AC1: The platform offers a comprehensive library of resources and information on the homebuying process, including guides, FAQs, and videos.\nAC2: The platform ensures that all information is up-to-date and accurate.\nAC3: The platform offers a way for buyers to ask questions and get answers from experts.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "PAY-837",
+    "summary": "Track my booking status and receive timely notifications",
+    "description": "As a traveler, I want to be able to track my booking status and receive timely notifications.",
+    "acceptance_criteria": "* The travel booking website or app provides a user-friendly booking dashboard with clear status updates and alerts.\n* The app allows the user to view their booking details, itinerary, and payment history, and provides links to modify or cancel their bookings.\n* The app sends timely notifications via email, SMS, or push notifications for booking confirmations, changes, and reminders.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "PAY-823",
+    "summary": "Sync my personal calendar with other calendars",
+    "description": "As a user, I want to be able to sync my personal calendar with other calendars, so that I can see all my events in one place.",
+    "acceptance_criteria": "* The user should be able to connect their personal calendar to other calendar services.\n* The user should be able to select which events to sync with other calendars.\n* The user should be able to disconnect their personal calendar from other calendar services at any time.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "OPS-119",
+    "summary": "Create a social media account",
+    "description": "As a new user, I want to create a social media account so that I can connect with friends and family online.",
+    "acceptance_criteria": "AC1: User should be able to sign up for an account using their email address or mobile number.\nAC2: User should be prompted to create a unique username and password for their account.\nAC3: User should receive a confirmation email or SMS message to verify their account.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "OPS-436",
+    "summary": "Track the status of my job applications",
+    "description": "As a job seeker, I want to be able to track the status of my job applications, so that I know where I stand in the job application process.",
+    "acceptance_criteria": "AC1: The job application tracking feature is easily accessible from the home screen.\nAC2: The user can see the status of their job applications, such as submitted, under review, or rejected.\nAC3: The user can receive notifications about the status of their job applications.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "EDU-549",
+    "summary": "Pay my bills online",
+    "description": "As a customer, I want to be able to pay my bills online so that I don’t have to go to a physical branch or send a check.",
+    "acceptance_criteria": "AC1: The customer should be able to pay their bills using the online banking portal.\nAC2: The payment should be completed in real-time.\nAC3: The customer should receive a confirmation once the payment is complete.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "EDU-613",
+    "summary": "Transfer money to another account in a different bank",
+    "description": "As a customer, I want to transfer money to another account in a different bank, so that I can send money to people who don't have accounts in my bank.",
+    "acceptance_criteria": "AC1: The bank allows interbank transfer through various channels, such as online, mobile, or in-person.\nAC2: The interbank transfer process is secure and requires proper authentication, such as PIN or password.\nAC3: The bank verifies the recipient's bank and account details, such as bank name, routing number, or account number.\nAC4: The customer pays a reasonable fee for the interbank transfer, based on the amount and speed of transfer.\nAC5: User stories for Weather Alert",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "SHOP-974",
+    "summary": "Receive weather alerts that include details about the duration of the...",
+    "description": "As a user, I want to receive weather alerts that include details about the duration of the weather condition and any changes in severity.",
+    "acceptance_criteria": "1. The weather alerts should include information about the expected duration of the weather condition, as well as any changes in severity that may occur.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "OPS-359",
+    "summary": "See all the tasks assigned to me",
+    "description": "As a team member, I want to be able to see all the tasks assigned to me, so that I can prioritize my work and manage my time effectively.",
+    "acceptance_criteria": "- The task management software should provide me with a dashboard that displays all the tasks assigned to me.\n- The software should allow me to filter tasks by deadline, priority, or status.\n- The software should allow me to update the status of my assigned tasks.\n- The software should notify me when a new task has been assigned to me.\n- The software should allow me to leave comments or notes on tasks for my team lead.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "TRIP-57",
+    "summary": "Share my progress and status with my clients",
+    "description": "As a contractor, I want to be able to share my progress and status with my clients, so that they can see the value I am delivering and trust that I am meeting their expectations.",
+    "acceptance_criteria": "- The task management software should allow me to create and share a dashboard that displays the progress and status of each task.\n- The software should allow me to customize the dashboard to show only the relevant information for each client or project.\n- The software should allow me to restrict access to certain tasks or information for each client.\n- The software should allow me to export reports or data to share with clients.\n- The software should provide a way for clients to leave comments or feedback on tasks.",
+    "labels": [],
+    "components": []
+  },
+  {
+    "key": "MED-191",
+    "summary": "View properties on a map",
+    "description": "As a user, I want to be able to view properties on a map so that I can see their location and proximity to other landmarks.",
+    "acceptance_criteria": "* The website should display a map that shows the location of each property in the search results.\n* The user should be able to zoom in and out of the map to view properties at different levels of detail.\n* The map should display relevant information about each property, such as the number of bedrooms/bathrooms and price.\n* The user should be able to filter their search results on the map based on specific criteria, such as price range or property type.\n* The website should allow the user to view more detailed information about a property by clicking on its location marker on the map.",
+    "labels": [],
+    "components": []
+  }
+]

@@ -33,12 +33,17 @@ class UserStory(BaseModel):
 
 
 class TestType(str, Enum):
+    __test__ = False  # not a pytest test class
     POSITIVE = "positive"
     NEGATIVE = "negative"
     EDGE = "edge"
     SECURITY = "security"
     PERFORMANCE = "performance"
+    RELIABILITY = "reliability"
+    USABILITY = "usability"
     ACCESSIBILITY = "accessibility"
+    COMPLIANCE = "compliance"
+    COMPATIBILITY = "compatibility"
 
 
 class Priority(str, Enum):
@@ -61,22 +66,28 @@ class TestCase(BaseModel):
     test_data: list[str]
     steps: list[TestStep]
     expected_result: str
-    acceptance_criterion: str = Field(
-        description="The acceptance criterion this test covers, or 'General' if none"
-    )
+    acceptance_criterion: str = Field(description="The acceptance criterion this test covers")
+    technique: str = Field(default="", description="Test design technique used")
 
 
-class GeneratedTestCases(BaseModel):
-    """Shape the model must return. Kept free of defaults so the JSON schema is strict."""
+class CriterionInsight(BaseModel):
+    """What the model understood about one acceptance criterion."""
 
-    test_cases: list[TestCase]
-    coverage_notes: str = Field(
-        description="Short note on what is covered and any gaps or assumptions"
-    )
+    text: str
+    category: str
+    confidence: float
+    requirement_type: str
+    secondary: list[str] = Field(default_factory=list)
+    techniques: list[str] = Field(default_factory=list)
+    limits: list[str] = Field(default_factory=list)
+    fields: list[str] = Field(default_factory=list)
+    roles: list[str] = Field(default_factory=list)
+    states: list[str] = Field(default_factory=list)
 
 
 class TestSuite(BaseModel):
     story: UserStory
     test_cases: list[TestCase]
+    insights: list[CriterionInsight] = Field(default_factory=list)
     coverage_notes: str = ""
     generator: str = Field(description="Which generator produced the suite")
