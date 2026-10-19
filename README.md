@@ -30,6 +30,7 @@ Jira story ─► split into acceptance criteria
 |---|---|---|
 | Datasets & loaders | `testcase_ai/model/datasets.py` | pandas, openpyxl |
 | Classifier (TF-IDF word + char n-grams → logistic regression, 3 heads) | `testcase_ai/model/classifier.py` | scikit-learn |
+| Test cases as code (pytest, Playwright) | `testcase_ai/codegen.py`, `testcase_ai/codegen_playwright.py` | — |
 | Information extraction | `testcase_ai/model/extractor.py` | re |
 | Test design techniques | `testcase_ai/model/test_design.py` | — |
 | End-to-end model (train / save / load / generate / feedback) | `testcase_ai/model/engine.py` | joblib |
@@ -97,7 +98,7 @@ streamlit run streamlit_app.py
 3. Check the **Model analysis** table: category, confidence, techniques and extracted facts for each
    criterion. Fix wrong categories and **Save corrections**.
 4. **Retrain model** in the sidebar — it learns from your corrections and uploaded datasets.
-5. Download test cases as CSV, JSON or Gherkin.
+5. Download test cases as pytest, Playwright, CSV, JSON or Gherkin.
 
 ## Test cases as code
 
@@ -107,6 +108,26 @@ and expected results become `assert` lines. The **PYTEST (.py)** export is one r
 `App` class listing every action and check the tests need: implement those methods once for your
 system (Playwright for a web UI, `requests` for an API) and run `pytest test_generated.py`.
 Until then each test fails with `NotImplementedError` naming the missing method.
+
+### Playwright web tests
+
+Each test case is also a **Playwright web test** (`codegen_playwright.py`, the **Playwright** tab on a
+test case and the **PLAYWRIGHT (.py)** export). Steps the model recognises become browser actions:
+sign in as a role, open the page, fill a field with the test value and submit, reload, sign out,
+Tab-only navigation, a 375 px mobile viewport, and timing the page 30 times for a p95 check. Expected
+results become `expect(...)` checks: an error shown or not, access denied, redirected to sign-in,
+quoted text visible, no horizontal scrolling. Steps only your team knows (for example "Only admins
+can delete users") become small typed helpers at the top of the file to fill in once.
+
+```bash
+pip install pytest pytest-playwright
+playwright install chromium
+APP_URL=https://your-app.example pytest test_generated_playwright.py --headed
+```
+
+At the top of the file, set `PAGES` (the page each story is tested on) and `USERS` (one account per
+role; `<ROLE>_EMAIL` / `<ROLE>_PASSWORD` environment variables override them). If VS Code says
+`Import "pytest" could not be resolved`, install the two packages above into the interpreter VS Code uses.
 
 ## Deploy to Vercel
 

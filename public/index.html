@@ -86,6 +86,10 @@
   .back { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; margin-bottom: 8px; }
   pre.code { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
              overflow-x: auto; font: 12.5px/1.55 var(--mono); margin: 8px 0; }
+  .code-tabs { display: flex; gap: 4px; margin-top: 10px; }
+  .code-tabs button { background: none; border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px;
+                      font: 12.5px var(--mono); color: var(--quiet); cursor: pointer; }
+  .code-tabs button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
   details.plain { margin-top: 6px; } details.plain summary { cursor: pointer; color: var(--quiet); font-size: 13px; }
   button.secondary.strong { border-color: var(--accent); color: var(--accent); font-weight: 600; }
   footer { max-width: 1280px; margin: 0 auto; padding: 0 24px 24px; color: var(--quiet); font-size: 12.5px; }
@@ -326,7 +330,7 @@ function render(suite) {
         el("span", { class: `chip ${tc.type}` }, tc.type), el("span", { class: "chip" }, tc.priority)),
       el("div", { class: "case-body" },
         el("p", {}, el("b", {}, "Covers: "), tc.acceptance_criterion, " · ", el("b", {}, "Technique: "), tc.technique),
-        el("pre", { class: "code" }, el("code", {}, tc.code)),
+        codeView(tc),
         el("details", { class: "plain" }, el("summary", {}, "Show the steps in plain English"),
           tc.preconditions.length ? el("p", {}, el("b", {}, "Preconditions: "), tc.preconditions.join("; ")) : "",
           tc.test_data.length ? el("p", {}, el("b", {}, "Test data: "), tc.test_data.join("; ")) : "",
@@ -348,11 +352,33 @@ function render(suite) {
     ...cases);
 }
 
+// Each test case as code: a pytest function or a Playwright web test (the last choice is kept for the next case).
+let codeLang = "pytest";
+const CODE_LABELS = { pytest: "pytest", playwright: "Playwright" };
+
+function codeView(tc) {
+  const code = el("code", {}, tc.code);
+  const buttons = Object.entries(CODE_LABELS).map(([lang, label]) => {
+    const b = el("button", { type: "button", "aria-pressed": String(lang === codeLang) }, label);
+    b.addEventListener("click", () => {
+      codeLang = lang;
+      buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      code.textContent = lang === "playwright" ? tc.playwright : tc.code;
+    });
+    return b;
+  });
+  code.textContent = codeLang === "playwright" ? tc.playwright : tc.code;
+  return el("div", {}, el("div", { class: "code-tabs" }, ...buttons), el("pre", { class: "code" }, code));
+}
+
+const FORMAT_LABELS = { pytest: "PYTEST (.py)", playwright: "PLAYWRIGHT (.py)" };
+const FILENAMES = { pytest: "test_generated.py", playwright: "test_generated_playwright.py", gherkin: "test_cases.feature" };
+
 function exportButtons() {
   return el("div", { class: "export" }, el("span", {}, `Export ${suites.length} stor${suites.length === 1 ? "y" : "ies"}:`),
-    ...["pytest", "csv", "json", "gherkin"].map((fmt) => {
-      const b = el("button", { class: fmt === "pytest" ? "secondary strong" : "secondary", type: "button" },
-                   fmt === "pytest" ? "PYTEST (.py)" : fmt.toUpperCase());
+    ...["pytest", "playwright", "csv", "json", "gherkin"].map((fmt) => {
+      const b = el("button", { class: FORMAT_LABELS[fmt] ? "secondary strong" : "secondary", type: "button" },
+                   FORMAT_LABELS[fmt] || fmt.toUpperCase());
       b.addEventListener("click", () => download(fmt));
       return b;
     }));
@@ -362,7 +388,7 @@ async function download(fmt) {
   try {
     const res = await api("/api/export", { suites, format: fmt });
     const url = URL.createObjectURL(await res.blob());
-    const name = { pytest: "test_generated.py", gherkin: "test_cases.feature" }[fmt] || `test_cases.${fmt}`;
+    const name = FILENAMES[fmt] || `test_cases.${fmt}`;
     const a = el("a", { href: url, download: name });
     document.body.append(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   } catch (e) { alert(e.message); }

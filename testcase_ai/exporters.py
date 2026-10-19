@@ -6,7 +6,8 @@ import csv
 import io
 import json
 
-from .codegen import to_pytest  # noqa: F401  (re-exported: the pytest export lives next to the others)
+from .codegen import to_pytest  # noqa: F401  (re-exported: the code exports live next to the others)
+from .codegen_playwright import to_playwright  # noqa: F401
 from .models import TestSuite
 
 CSV_COLUMNS = [

@@ -24,7 +24,7 @@ from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
 from testcase_ai.config import JiraSettings  # noqa: E402
-from testcase_ai.exporters import to_csv, to_gherkin, to_json, to_pytest  # noqa: E402
+from testcase_ai.exporters import to_csv, to_gherkin, to_json, to_playwright, to_pytest  # noqa: E402
 from testcase_ai.jira_client import JiraClient, JiraError  # noqa: E402
 from testcase_ai.model.engine import TestCaseModel  # noqa: E402
 from testcase_ai.models import TestSuite, UserStory  # noqa: E402
@@ -55,7 +55,7 @@ class GenerateIn(BaseModel):
 
 class ExportIn(BaseModel):
     suites: list[TestSuite] = Field(..., min_length=1, max_length=50)
-    format: Literal["pytest", "csv", "json", "gherkin"] = "pytest"
+    format: Literal["pytest", "playwright", "csv", "json", "gherkin"] = "pytest"
 
 
 class JiraIn(BaseModel):
@@ -97,6 +97,7 @@ def generate(body: GenerateIn) -> TestSuite:
 @app.post("/api/export", response_class=PlainTextResponse)
 def export(body: ExportIn) -> PlainTextResponse:
     writers = {"pytest": (to_pytest, "text/x-python", "test_generated.py"),
+               "playwright": (to_playwright, "text/x-python", "test_generated_playwright.py"),
                "csv": (to_csv, "text/csv", "test_cases.csv"),
                "json": (to_json, "application/json", "test_cases.json"),
                "gherkin": (to_gherkin, "text/plain", "test_cases.feature")}

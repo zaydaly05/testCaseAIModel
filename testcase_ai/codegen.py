@@ -50,6 +50,7 @@ def literal(value: str) -> str:
 class _Method:
     name: str
     takes_value: bool = False
+    is_check: bool = False
     meaning: set[str] = field(default_factory=set)
 
 
@@ -59,9 +60,10 @@ class _Registry:
     def __init__(self):
         self.methods: dict[str, _Method] = {}
 
-    def use(self, name: str, meaning: str, takes_value: bool = False) -> str:
+    def use(self, name: str, meaning: str, takes_value: bool = False, is_check: bool = False) -> str:
         m = self.methods.setdefault(name, _Method(name))
         m.takes_value = m.takes_value or takes_value
+        m.is_check = m.is_check or is_check
         m.meaning.add(meaning)
         return name
 
@@ -78,14 +80,14 @@ def _call(text: str, test_data: list[str], reg: _Registry) -> str:
 
 
 def _check(text: str, reg: _Registry) -> str:
-    return f"assert app.{reg.use(identifier(text, prefix='check'), text)}()"
+    return f"assert app.{reg.use(identifier(text, prefix='check'), text, is_check=True)}()"
 
 
 def test_function(tc: TestCase, reg: _Registry | None = None) -> str:
     reg = reg or _Registry()
     name = f"test_{identifier(tc.id, max_words=4, prefix='tc')}_{identifier(tc.title, max_words=6, prefix='case')}"
     covers = " ".join(tc.acceptance_criterion.split())[:100]
-    lines = [f"def {name}(app):",
+    lines = [f"def {name}(app: App) -> None:",
              f"    # {tc.id} [{tc.type.value}, {tc.priority.value}] covers: {covers}"]
     if tc.preconditions:
         lines.append("    # arrange")
@@ -110,9 +112,10 @@ def _app_class(reg: _Registry) -> str:
            '    """',
            ""]
     for m in sorted(reg.methods.values(), key=lambda m: m.name):
-        args = "self, value" if m.takes_value else "self"
+        args = "self, value: object" if m.takes_value else "self"
+        returns = "bool" if m.is_check else "None"
         meaning = " ".join(sorted(m.meaning)[0].split())[:110]
-        out.append(f"    def {m.name}({args}):")
+        out.append(f"    def {m.name}({args}) -> {returns}:")
         out.append(f"        # {meaning}")
         out.append(f'        raise NotImplementedError("App.{m.name}")')
         out.append("")
@@ -129,5 +132,5 @@ def to_pytest(suites: list[TestSuite]) -> str:
     header = ('"""Generated test cases. Run with:  pytest test_generated.py\n\n'
               'Implement the methods of App below once for your system; every test then runs against it.\n"""\n\n'
               "import pytest\n\n\n")
-    fixture = "\n\n@pytest.fixture\ndef app():\n    return App()\n\n\n"
+    fixture = "\n\n@pytest.fixture\ndef app() -> App:\n    return App()\n\n\n"
     return header + _app_class(reg) + fixture + "\n".join(tests)

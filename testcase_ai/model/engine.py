@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from ..codegen import test_function
+from ..codegen_playwright import playwright_function
 from ..models import CriterionInsight, Priority, TestCase, TestStep, TestSuite, UserStory
 from .extractor import CriterionFacts, analyze_criterion, analyze_story, extract_acceptance_criteria
 from .heads import FOCUS_CLASSES
@@ -225,6 +226,7 @@ class TestCaseModel:
                 technique=d.technique,
             ))
             tc.code = test_function(tc)
+            tc.playwright = playwright_function(tc, story.key)
 
         total = sum(len(c) for c in per_criterion)
         covered = len({c.acceptance_criterion for c in cases})

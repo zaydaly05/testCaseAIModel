@@ -70,6 +70,10 @@ def test_api_generate_and_export(client):
     assert py.status_code == 200 and "test_generated.py" in py.headers["content-disposition"]
     compile(py.text, "test_generated.py", "exec")
     assert all(tc["code"].startswith("def test_") for tc in suite["test_cases"])
+    pw = client.post("/api/export", json={"suites": [suite], "format": "playwright"})
+    assert pw.status_code == 200 and "test_generated_playwright.py" in pw.headers["content-disposition"]
+    compile(pw.text, "test_generated_playwright.py", "exec")
+    assert all(tc["playwright"].startswith("def test_") for tc in suite["test_cases"])
 
 
 def test_api_rejects_bad_input(client):

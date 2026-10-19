@@ -69,6 +69,7 @@ class TestCase(BaseModel):
     acceptance_criterion: str = Field(description="The acceptance criterion this test covers")
     technique: str = Field(default="", description="Test design technique used")
     code: str = Field(default="", description="The test case as a pytest function")
+    playwright: str = Field(default="", description="The test case as a Playwright web test")
 
 
 class CriterionInsight(BaseModel):
