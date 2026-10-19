@@ -10,10 +10,11 @@ A simple Streamlit interface lets you test it, review its decisions and teach it
 Jira story ─► split into acceptance criteria
              │
              ├─► Classifier (trained)      what kind of requirement is this?
-             │     stage 1: requirement type   functional / security / performance / usability /
-             │                                 reliability / compliance / operational
-             │     stage 2: test focus         validation / boundary / error handling /
-             │                                 workflow / notification / general
+             │     type head    functional / security / performance / usability /
+             │                  reliability / compliance / operational
+             │     kind head    functional vs non-functional (adds the 6k-row FR/NFR dataset)
+             │     focus head   validation / boundary / error handling /
+             │                  workflow / notification / general
              │
              ├─► Extractor (NLP rules)    limits (≥ 12 characters, 1–99, within 5 minutes),
              │                            fields (email, password…), roles, states, channels,
@@ -28,7 +29,7 @@ Jira story ─► split into acceptance criteria
 | Part | File | Library |
 |---|---|---|
 | Datasets & loaders | `testcase_ai/model/datasets.py` | pandas, openpyxl |
-| Classifier (TF-IDF word + char n-grams → logistic regression, 2 stages) | `testcase_ai/model/classifier.py` | scikit-learn |
+| Classifier (TF-IDF word + char n-grams → logistic regression, 3 heads) | `testcase_ai/model/classifier.py` | scikit-learn |
 | Information extraction | `testcase_ai/model/extractor.py` | re |
 | Test design techniques | `testcase_ai/model/test_design.py` | — |
 | End-to-end model (train / save / load / generate / feedback) | `testcase_ai/model/engine.py` | joblib |
@@ -36,23 +37,28 @@ Jira story ─► split into acceptance criteria
 | Jira client | `testcase_ai/jira_client.py` | requests |
 | UI | `app.py` | Streamlit |
 
-### Training data
+### Training data (all from the project's Google Drive)
 
-- **PROMISE NFR dataset** + **software_requirements_extended** from the project's Google Drive
-  (`Graduation Project SWE 12/Datasets/Original Datasets`) — 1,320 labeled requirements after
-  de-duplication, mapped to the model's categories. Raw files in `datasets/raw`, see `datasets/README.md`.
-- **Handcrafted requirements** (`testcase_ai/model/data/handcrafted_requirements.csv`) — ~290
-  story-style examples, mainly for the test-focus categories PROMISE does not have.
-- **Your corrections** from the UI and any **datasets you upload** (stored in `models/`, not committed).
+| Dataset | Rows used | Labels | Role |
+|---|---|---|---|
+| PROMISE NFR + software_requirements_extended | 1,429 | 12 PROMISE classes | gold |
+| DOSSPRE 1.0 | 1,271 | security / quality classes | gold |
+| Handcrafted story-style examples | ~310 | all 12 categories | gold |
+| FR_NFR_Dataset | 5,945 | functional / non-functional | weak – functional-vs-non-functional head only |
+| Classified_AI_Requirements (LLM-labeled) | 1,091 | mixed | not used by default (`--with-ai-labeled`) |
+| f1.txt / f2.txt user stories | 582 stories, 2,200 criteria | none | demo input + coverage check |
 
-### Current scores (5-fold cross-validation, 1,607 requirements)
+Raw files are in `datasets/raw` (see `datasets/README.md`); `python -m testcase_ai.model.datasets`
+rebuilds the processed CSVs. Your UI corrections and uploaded datasets are added on retraining
+(stored in `models/`, not committed).
 
-Accuracy **0.81**, macro F1 **0.72**. Strongest: functional 0.87, notification 0.81, performance 0.78,
-operational 0.78, security 0.75. Weakest (fewest examples): workflow 0.53, compliance 0.55 —
-adding labeled examples for these is the quickest way to improve the model.
+### Scores
 
-On the 45 real stories in `samples/real_stories.json` (held out, never trained on) every
-acceptance criterion is covered by at least one test case.
+5-fold cross-validation on 2,898 gold-labeled requirements: accuracy **≈0.76**, macro F1 **≈0.66**.
+Strongest: functional 0.81, operational 0.79, usability 0.76, security 0.72, performance 0.72.
+Weakest: workflow and compliance (0.46) – they have the fewest examples, so labeling more of
+those is the quickest improvement. Every acceptance criterion of all 582 real stories is covered
+by at least one test case. How each dataset was chosen is documented in `docs/experiments.md`.
 
 ## Setup
 
@@ -67,12 +73,14 @@ cp .env.example .env   # optional: Jira credentials
 ```bash
 python -m testcase_ai.model.train                    # train + cross-validate + save to models/
 python -m testcase_ai.model.train --data my.csv      # include your own labeled data
+python -m testcase_ai.model.train --with-ai-labeled  # also use the LLM-labeled requirements
 ```
 
 Your own data can be CSV/XLSX with a text column (`text`, `requirement`, …) and a label column
-(`category`, `label`, `type`, `class`). Labels may be the model's categories
+(`category`, `label`, `type`, `class`, `classification`). Labels may be the model's categories
 (`functional, validation, boundary, security, error_handling, reliability, workflow, performance,
-notification, usability, compliance, operational`) or PROMISE codes (`F, SE, PE, US, LF, A, FT, L, O, MN, PO, SC`).
+notification, usability, compliance, operational`) PROMISE codes (`F, SE, PE, US, LF, A, FT, L, O, MN, PO, SC`), DOSSPRE classes (`Authentication`,
+`Availability`, …) or `FR` / `NFR`. Every sheet of an Excel file is read.
 PROMISE `.txt` files work too. The app trains a model automatically on first start if none exists.
 
 ## Run the interface

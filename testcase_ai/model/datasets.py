@@ -16,7 +16,7 @@ promise_requirements.csv       gold     12 categories (PROMISE NFR + extended)
 dosspre_requirements.csv       gold     DOSSPRE 1.0 security/quality classes, mapped
 handcrafted_requirements.csv   gold     all categories, story style
 fr_nfr_requirements.csv        weak     functional / nonfunctional only
-ai_classified_requirements.csv weak     labels assigned by LLMs (noisy)
+ai_classified_requirements.csv weak     labels assigned by LLMs (noisy; not used by default)
 =============================  =======  ==============================================
 
 "Weak" rows are only used for training, never for evaluation. Rebuild the
@@ -46,6 +46,9 @@ AI_CLASSIFIED = DATA_DIR / "ai_classified_requirements.csv"
 
 GOLD_SOURCES = (PROMISE, DOSSPRE, HANDCRAFTED)
 WEAK_SOURCES = (FR_NFR, AI_CLASSIFIED)
+# Weak sources used by default. AI_CLASSIFIED lowered the scores in the ablation study
+# (docs/experiments.md), so it is only used when asked for explicitly.
+DEFAULT_WEAK = (FR_NFR,)
 
 _TEXT_COLS = ("text", "requirement", "requirement text", "requirementtext", "requirement_text", "sentence",
               "description")
@@ -150,9 +153,9 @@ def is_gold(df: pd.DataFrame) -> pd.Series:
 
 
 def load_training_data(extra: list[str | Path] | None = None, feedback: str | Path | None = None,
-                       include_weak: bool = True) -> pd.DataFrame:
+                       weak: tuple[Path, ...] = DEFAULT_WEAK) -> pd.DataFrame:
     # Weak sources first so gold labels win on duplicate texts.
-    sources = (list(WEAK_SOURCES) if include_weak else []) + list(GOLD_SOURCES)
+    sources = list(weak) + list(GOLD_SOURCES)
     frames = [load_table(p) for p in sources if p.exists()]
     frames += [load_any(p) for p in extra or []]
     if feedback and Path(feedback).exists():

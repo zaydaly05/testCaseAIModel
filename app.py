@@ -48,8 +48,7 @@ with st.sidebar:
     st.header("🧠 Model")
     meta = model.metadata
     st.caption(f"Trained {meta.get('trained_at', '?')} on **{meta.get('n_samples', '?')}** labeled requirements "
-               f"({meta.get('n_gold', '?')} with a specific category) and **{meta.get('n_unlabeled', 0)}** "
-               "unlabeled acceptance criteria from real stories")
+               f"({meta.get('n_gold', '?')} with a specific category)")
     if ev := meta.get("evaluation"):
         c1, c2 = st.columns(2)
         c1.metric("Accuracy", f"{ev['accuracy']:.0%}")

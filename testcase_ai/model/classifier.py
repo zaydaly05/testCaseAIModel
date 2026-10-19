@@ -104,8 +104,9 @@ class RequirementClassifier:
     weak_weight:   sample weight of rows from weakly labeled datasets.
     """
 
-    def __init__(self, C: float = 8.0, seed: int = 42, kind_weight: float = 0.0, weak_weight: float = 0.3,
-                 general_sample: int = GENERAL_SAMPLE, use_unlabeled: bool = True):
+    # Defaults chosen by the ablation study in docs/experiments.md.
+    def __init__(self, C: float = 8.0, seed: int = 42, kind_weight: float = 0.3, weak_weight: float = 0.3,
+                 general_sample: int = GENERAL_SAMPLE, use_unlabeled: bool = False):
         self.C = C
         self.seed = seed
         self.kind_weight = kind_weight

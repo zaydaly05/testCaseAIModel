@@ -16,7 +16,7 @@ import sklearn
 
 from ..models import CriterionInsight, Priority, TestCase, TestStep, TestSuite, UserStory
 from .classifier import FOCUS_CLASSES, RequirementClassifier
-from .datasets import is_gold, load_training_data, load_unlabeled_criteria
+from .datasets import AI_CLASSIFIED, DEFAULT_WEAK, is_gold, load_training_data
 from .extractor import CriterionFacts, analyze_criterion, analyze_story, extract_acceptance_criteria
 from .taxonomy import CATEGORY_RISK, HIGH_RISK_WORDS
 from .test_design import Draft, design
@@ -26,7 +26,7 @@ MODEL_PATH = MODEL_DIR / "testcase_model.joblib"
 FEEDBACK_PATH = MODEL_DIR / "feedback.csv"
 EXTRA_DATA_DIR = MODEL_DIR / "extra_data"
 LOW_CONFIDENCE = 0.5
-MODEL_VERSION = 2
+MODEL_VERSION = 3
 MAX_TECHNIQUES = 3
 
 
@@ -60,24 +60,23 @@ class TestCaseModel:
     # ------------------------------------------------------------- lifecycle
     @classmethod
     def train(cls, extra_data: list[str | Path] | None = None, feedback: str | Path | None = FEEDBACK_PATH,
-              evaluate: bool = True) -> "TestCaseModel":
+              evaluate: bool = True, include_ai_labeled: bool = False) -> "TestCaseModel":
         if extra_data is None:
             extra_data = sorted(p for p in EXTRA_DATA_DIR.glob("*") if p.suffix.lower() in (".csv", ".xlsx", ".xls", ".txt"))
-        data = load_training_data(extra_data, feedback)
-        unlabeled = load_unlabeled_criteria()
-        classifier = RequirementClassifier().fit(data, unlabeled)
+        weak = DEFAULT_WEAK + ((AI_CLASSIFIED,) if include_ai_labeled else ())
+        data = load_training_data(extra_data, feedback, weak)
+        classifier = RequirementClassifier().fit(data)
         metadata = {
             "version": MODEL_VERSION,
             "sklearn": sklearn.__version__,
             "trained_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "n_samples": len(data),
             "n_gold": int(is_gold(data).sum()),
-            "n_unlabeled": len(unlabeled),
             "class_counts": data["category"].value_counts().to_dict(),
             "sources": sorted(data["source"].unique()),
         }
         if evaluate:
-            report = RequirementClassifier().evaluate(data, unlabeled)
+            report = RequirementClassifier().evaluate(data)
             metadata["evaluation"] = report.as_dict()
             metadata["evaluation_report"] = report.as_text()
         return cls(classifier, metadata)

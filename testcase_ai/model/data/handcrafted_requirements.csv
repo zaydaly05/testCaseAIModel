@@ -286,3 +286,23 @@ Subscribers are emailed when their subscription is about to renew,notification
 An in app message tells the user that a new version is available,notification
 Users can choose to receive notifications by email SMS or push,notification
 The project owner is notified when a task is overdue,notification
+Only HR staff can view employee salaries,security
+Only the project owner can archive the project,security
+Only team leads are allowed to approve timesheets,security
+Only verified sellers can publish listings,security
+Only accountants may edit posted invoices,security
+Only the author of a post can edit or remove it,security
+Members cannot see the admin settings page,security
+Only users with the editor role can publish articles,security
+Only doctors can view a patient's full medical history,security
+Students cannot access other students' grades,security
+Only super admins can create new admin accounts,security
+Customers can only see their own orders,security
+Only the assigned agent can close a support ticket,security
+Only the treasurer can approve payments above the limit,security
+Guests can browse products but cannot place orders,security
+Deleting a team is restricted to the team owner,security
+Only licensed pharmacists can approve prescriptions,security
+A manager can see reports for their own department only,security
+Only the organizer can cancel the event,security
+Read-only users cannot change any settings,security
