@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from ..codegen import test_function
 from ..models import CriterionInsight, Priority, TestCase, TestStep, TestSuite, UserStory
 from .extractor import CriterionFacts, analyze_criterion, analyze_story, extract_acceptance_criteria
 from .heads import FOCUS_CLASSES
@@ -211,7 +212,7 @@ class TestCaseModel:
 
         cases = []
         for n, (d, technique, a) in enumerate(ordered, 1):
-            cases.append(TestCase(
+            cases.append(tc := TestCase(
                 id=f"{story.key}-TC{n:02d}",
                 title=d.title,
                 type=d.type,
@@ -223,6 +224,7 @@ class TestCaseModel:
                 acceptance_criterion=a.facts.text,
                 technique=d.technique,
             ))
+            tc.code = test_function(tc)
 
         total = sum(len(c) for c in per_criterion)
         covered = len({c.acceptance_criterion for c in cases})

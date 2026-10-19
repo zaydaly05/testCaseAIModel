@@ -84,6 +84,10 @@
   tr.clickable { cursor: pointer; }
   tr.clickable:hover td { background: var(--accent-soft); }
   .back { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; padding: 0; margin-bottom: 8px; }
+  pre.code { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
+             overflow-x: auto; font: 12.5px/1.55 var(--mono); margin: 8px 0; }
+  details.plain { margin-top: 6px; } details.plain summary { cursor: pointer; color: var(--quiet); font-size: 13px; }
+  button.secondary.strong { border-color: var(--accent); color: var(--accent); font-weight: 600; }
   footer { max-width: 1280px; margin: 0 auto; padding: 0 24px 24px; color: var(--quiet); font-size: 12.5px; }
 </style>
 </head>
@@ -321,12 +325,13 @@ function render(suite) {
       el("summary", {}, el("span", { class: "id" }, tc.id), el("span", { class: "title" }, tc.title),
         el("span", { class: `chip ${tc.type}` }, tc.type), el("span", { class: "chip" }, tc.priority)),
       el("div", { class: "case-body" },
-        el("p", {}, el("b", {}, "Technique: "), tc.technique),
-        el("p", {}, el("b", {}, "Covers: "), tc.acceptance_criterion),
-        tc.preconditions.length ? el("p", {}, el("b", {}, "Preconditions: "), tc.preconditions.join("; ")) : "",
-        tc.test_data.length ? el("p", {}, el("b", {}, "Test data: "), tc.test_data.join("; ")) : "",
-        el("div", { class: "table-wrap" }, steps),
-        el("p", {}, el("b", {}, "Expected result: "), tc.expected_result)));
+        el("p", {}, el("b", {}, "Covers: "), tc.acceptance_criterion, " · ", el("b", {}, "Technique: "), tc.technique),
+        el("pre", { class: "code" }, el("code", {}, tc.code)),
+        el("details", { class: "plain" }, el("summary", {}, "Show the steps in plain English"),
+          tc.preconditions.length ? el("p", {}, el("b", {}, "Preconditions: "), tc.preconditions.join("; ")) : "",
+          tc.test_data.length ? el("p", {}, el("b", {}, "Test data: "), tc.test_data.join("; ")) : "",
+          el("div", { class: "table-wrap" }, steps),
+          el("p", {}, el("b", {}, "Expected result: "), tc.expected_result))));
   });
 
   const back = el("button", { class: "back", type: "button" }, `← All ${suites.length} stories`);
@@ -345,8 +350,9 @@ function render(suite) {
 
 function exportButtons() {
   return el("div", { class: "export" }, el("span", {}, `Export ${suites.length} stor${suites.length === 1 ? "y" : "ies"}:`),
-    ...["csv", "json", "gherkin"].map((fmt) => {
-      const b = el("button", { class: "secondary", type: "button" }, fmt.toUpperCase());
+    ...["pytest", "csv", "json", "gherkin"].map((fmt) => {
+      const b = el("button", { class: fmt === "pytest" ? "secondary strong" : "secondary", type: "button" },
+                   fmt === "pytest" ? "PYTEST (.py)" : fmt.toUpperCase());
       b.addEventListener("click", () => download(fmt));
       return b;
     }));
@@ -356,7 +362,8 @@ async function download(fmt) {
   try {
     const res = await api("/api/export", { suites, format: fmt });
     const url = URL.createObjectURL(await res.blob());
-    const a = el("a", { href: url, download: `test_cases.${fmt === "gherkin" ? "feature" : fmt}` });
+    const name = { pytest: "test_generated.py", gherkin: "test_cases.feature" }[fmt] || `test_cases.${fmt}`;
+    const a = el("a", { href: url, download: name });
     document.body.append(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   } catch (e) { alert(e.message); }
 }

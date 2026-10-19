@@ -99,6 +99,15 @@ streamlit run streamlit_app.py
 4. **Retrain model** in the sidebar — it learns from your corrections and uploaded datasets.
 5. Download test cases as CSV, JSON or Gherkin.
 
+## Test cases as code
+
+Every generated test case is also a **pytest function** (`codegen.py`): preconditions and steps become
+calls on an `app` object, test data becomes real values (`"a" * 11` for an 11-character password),
+and expected results become `assert` lines. The **PYTEST (.py)** export is one runnable file with an
+`App` class listing every action and check the tests need: implement those methods once for your
+system (Playwright for a web UI, `requests` for an API) and run `pytest test_generated.py`.
+Until then each test fails with `NotImplementedError` naming the missing method.
+
 ## Deploy to Vercel
 
 The deployed app is a FastAPI function (`api/index.py`) plus a static page (`public/index.html`).
