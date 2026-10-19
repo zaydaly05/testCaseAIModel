@@ -1010,7 +1010,9 @@ The system will notify affected parties when changes occur affecting clinicals i
 The system will notify affected parties when changes occur affecting classes including but not limited to class cancellations class section detail changes and changes to class offerings for a given quarter.,functional
 The feature of the application shall provide the optimized route for the given addresses,functional
 This feature provides the user to select an optimized route for the addresses given and fixing any path between the desired locations.,functional
+"Fast internet connection is not mandatory, but it would increase the performance of the application",nonfunctional
 "after every user request, new maps are needed to be loaded",functional
+"As Google Maps API is being used for this application, it is mandatory that we abide by the terms of use specified by Google",nonfunctional
 After installing the Application from iTunes or the App store the user will be asked to login.,functional
 "Upon successful login, the user can select from the following catalogue options: Spring 2013 ,Winter 2013",functional
 "Based on the selection the product categories will be listed: Outerwear,Soft Shell,Fleece,Knits,Wovens,Active Wear, Safety,Accessories,Team Wear, e.c.o. Collection",functional
@@ -1032,6 +1034,12 @@ All users should be able to search by keyword or product ID.,functional
 "All users should be able to navigate using the sub navigation icons to access the Catalogue PDF, 360 videos, and to contact a rep representative",functional
 The application itself will only have minimal logic and so there should be little to no issues with the computation required by the phone itself.,functional
 "The only hazard is a user using the device when they should not be, such as while driving.",functional
+The application must be able to link up with the INTERNAL system in order for users to properly log in and be identified.,nonfunctional
+This information must be kept secure.,nonfunctional
+The data entry should not be that much more difficult than if they were at an actual computer.,nonfunctional
+"Because this application will be on a phone, portability is also important. We don’t want it to take up so much space or be too slow causing the user’s to not be able to fit it on the device.",nonfunctional
+"When the user fills all necessary fields, an activation mail will be sent to users mail address",nonfunctional
+User will be able to log in and start using the system just after activating his/her account.,nonfunctional
 user enters his/her username or email and his/her password and logs in the system,functional
 "user touches log out button, and logs out of the system. The user will not use the system until he/she logs in again.",functional
 "user is able to search items. User can search items according to their price, their location, their category.",functional
@@ -1055,6 +1063,8 @@ the user can mark an item as a favorite so that he will be notified if any chang
 the user can rate and comment about the users whom he traded with.,functional
 10000 users should be able to use the system at the same time.,functional
 The response time of the system should be 2 seconds at most.,functional
+Search form should be added to home page,nonfunctional
+Sites should be added correctly to the search engine,nonfunctional
 Build the search engine based on the search form and sites available,functional
 "User should be able to search by site name, description",functional
 System should be self capable with feature of Auto Suggest,functional
@@ -1089,6 +1099,105 @@ Application should replace the site’s description with the clicked on image de
 "when User clicks on link to About, application should respond with About page",functional
 No personal data about a user is stored.,functional
 User location information should be deleted nightly via a cron job.,functional
+Project admins will need to be authorized before they can use the admin interface to manage the sites in the project.,nonfunctional
+Standard web security measure should be implemented.,nonfunctional
+"This application should be easily extendable, maintainable and able to be released as an open-source application",nonfunctional
+The app runs on a smart phone with operating system Android version 2.3.,nonfunctional
+"All layout shall be according to the TU/e corporate identity, unless in conflict with the guidelines of requirements UCOR003-UCOR006.",nonfunctional
+Icons are according to the Android Icon Guidelines.,nonfunctional
+The user interfaces should be according to the Android User Interface Guidelines.,nonfunctional
+The Twitter â€tweetâ€ interface should be according to the Twitter Guidelines.,nonfunctional
+The Facebook â€likeâ€ interface should be according to the Facebook Guidelines.,nonfunctional
+The campus map covers the campus of the TU/e.,nonfunctional
+The campus map covers the central train station of Eindhoven.,nonfunctional
+A new stylistic map has the right dimensions.,nonfunctional
+A new stylistic map is geographically correct.,nonfunctional
+News is restricted to what is available in the feeds on the list of news RSS-feeds.,nonfunctional
+Agenda is restricted to what is available in the feeds on the list of agenda RSS-feeds.,nonfunctional
+Information about a certain person is restricted to what is available on the employee pages of the TU/e,nonfunctional
+The information and the search methods of the Encyclopedia-app are restricted to the services provided by the MediaWiki of the TU/e Encyclopedia.,nonfunctional
+The information and the search methods of the Studenthandbook-app are restricted depending on file format of the handbook-information.,nonfunctional
+Response Time GIST: The fastness of the search SCALE: The response time of a search METER: Measurements obtained from 1000 searches during testing. MUST: No more than 2 seconds 100% of the time. WISH: No more than 1 second 100% of the time.,nonfunctional
+"System Dependability GIST: The fault tolerance of the system. SCALE: If the system loses the connection to the Internet or to the GPS device or the system gets some strange input, the user should be informed. METER: Measurements obtained from 1000 hours of usage during testing. MUST: 100% of the time.",nonfunctional
+Hard Drive Space GIST: Hard drive space. SCALE: The applicationâ€™s need of hard drive space. METER: MB. MUST: No more than 20 MB. PLAN: No more than 15 MB. WISH: No more than 10 MB. MB: DEFINED: Megabyte,nonfunctional
+Application Memory Usage GIST: The amount of Operate System memory occupied by the application. SCALE: MB. METER: Observations done from the performance log during testing MUST: No more than 20 MB. PLAN: No more than 16 MB WISH: No more than 10 MB Operate System: DEFINED: The mobile Operate System which the application is running on. MB: DEFINED: Megabyte.,nonfunctional
+System Reliability GIST: The reliability of the system. SCALE: The reliability that the system gives the right result on a search. METER: Measurements obtained from 1000 searches during testing. MUST: More than 98% of the searches. PLAN: More than 99% of the searches. WISH: 100% of the searches.,nonfunctional
+System Availability GIST: The availability of the system when it is used. SCALE: The average system availability (not considering network failing). METER: Measurements obtained from 1000 hours of usage during testing. MUST: More than 98% of the time. PLAN: More than 99% of the time. WISH: 100% of the time.,nonfunctional
+Internet Connection DESC: The application should be connected to the Internet.,nonfunctional
+GPS Connection DESC: The application should be connected to the GPS device.,nonfunctional
+"Communication Security GIST: Security of the communication between the system and server. SCALE: The messages should be encrypted for log-in communications, so others cannot get user-name and password from those messages. METER: Attempts to get user-name and password through obtained messages on 1000 log-in session during testing. MUST: 100% of the Communication Messages in the communication of a log-in session should be encrypted. Communication Messages: Defined: Every exchanged of information between client and server.",nonfunctional
+Restaurant Owner Login Account Security GIST: Security of accounts. SCALE: If a restaurant owner tries to log in to the web portal with a non-existing account then the restaurant owner should not be logged in. The restaurant owner should be notified about log-in failure. METER: 1000 attempts to log-in with a non-existing user account during testing. MUST: 100% of the time.,nonfunctional
+Admin Login Account Security GIST: Security of accounts. SCALE: If an admin tries to log in to the web portal with a non-existing account then the admin should not be logged in. The admin should be notified about log-in failure. METER: 1000 attempts to log-in with a non-existing user account during testing. MUST: 100% of the time.,nonfunctional
+"Restaurant Owner Account Security GIST: Security of restaurant owners accounts. SCALE: A restaurant owner and IP address should not be able to log-in for a certain time period after three times of failed log-in attempts. METER: 1000 attempts to log-in during the lock period after user account has been locked because of failed log-in attempts of three times. MUST: The locking period should be half an hour, and during that period the log-in function is disabled.",nonfunctional
+"Admin Account Security GIST: Security of admin accounts. SCALE: An admin and IP address should not be able to log-in to the web portal for a certain time period after three times of failed log-in attempts. METER: 1000 attempts to log-in during the lock period after user account has been locked because of failed log-in attempts of three times. MUST: The locking period should be half an hour, and during that period the log-in function is disabled.",nonfunctional
+"User Create Account Security GIST: The security of creating account for users of the system. SCALE: If a user wants to create an account and the desired user name is occupied, the user should be asked to choose a different user name. METER: Measurements obtained on 1000 hours of usage during testing. MUST: 100% of the time.",nonfunctional
+"Restaurant Owner Create Account Security GIST: The security of creating account for restaurant owners of the system. SCALE: If a restaurant owner wants to create an account and the desired user name is occupied, the restaurant owner should be asked to choose a different user name. METER: Measurements obtained on 1000 hours of usage during testing. MUST: 100% of the time.",nonfunctional
+Application extendibility DESC: The application should be easy to extend. The code should be written in a way that it favors implementation of new functions.,nonfunctional
+Application testability DESC: Test environments should be built for the application to allow testing of the applications different functions.,nonfunctional
+Application portability DESC: The application should be portable with iOS and Android.,nonfunctional
+Performance Requirements 10000 users should be able to use the system at the same time. The response time of the system should be 2 seconds at most.,nonfunctional
+Design Constraints We will use â€œwaterfall methodâ€ and Object â€“ Oriented Programming paradigm. We will use Java as programming language. The Android version of the device should be 2.3 or higher. The system requires Internet connection all the time.,nonfunctional
+â€‹ The system will be designed in such a way that the algorithms for the four main units will be able to be easily swapped out.,nonfunctional
+The overall accuracy of the Web APIâ€™s response will be measured using a developer-made testing set.,nonfunctional
+The overall accuracy is calculated by dividing total number of correct answers by the number of questions asked.,nonfunctional
+Modularity The system will be designed in such a way that the algorithms for the four main units will be able to be easily swapped out.,nonfunctional
+"The overall accuracy of the Web APIâ€™s response will be measured using a developer-made testing set. The overall accuracy is calculated by dividing total number of correct answers by the number of questions asked. The accuracy of the Generic Question Constructionâ€‹ part will be close to 80%. The accuracy of the Generic Answer Constructionâ€‹ unit will be close to 70% The accuracy of the Generic Answer Populationâ€‹ unit will be close to 70% Drexel facilitiesâ€™ locations and schedules will have accuracy greater than 70% â€‹ Drexel staffâ€™s office locations, contact information, and positions will have accuracy greater than 70%. â€‹ Drexel policies including academics, admissions, information technology etc. will have accuracy greater than 70%.â€‹ â€‹ On-campus dining locations, hours, food types, etc. will have accuracy greater than 50%. â€‹ Food trucksâ€™ general locations, hours, and food types on Drexel Campus will have accuracy greater than 40%.",nonfunctional
+"Fast Response The average time for the server to respond, over the question testing set, will be less than or equal to 2 seconds",nonfunctional
+"Security The connection between the Web API and the programs will use HTTPS, for security.",nonfunctional
+Ease of Useâ€‹ A new user will make less than 3 mistakes in 5 minutes after 5 minutes of use.,nonfunctional
+The search feature should be prominent and easy to find for the user.,nonfunctional
+"The different search options should be evident, simple and easy to understand.",nonfunctional
+The results displayed in the list view should be user friendly and easy to understand. Selecting an element in the result list should only take one click.,nonfunctional
+The results displayed in the map view should be user friendly and easy to understand. Selecting a pin on the map should only take one click.,nonfunctional
+The information link should be prominent and it should be evident that it is a usable link. Selecting the information link should only take one click.,nonfunctional
+The user interface must be GUI based.,nonfunctional
+The users are required to input the data from cell phone keypad,nonfunctional
+User has the options to change the settings locally and remotely.,nonfunctional
+Reduce the typing option by giving support for select menus.,nonfunctional
+The primary performance requirement is speed of the network. The application itself will only have minimal logic and so there should be little to no issues with the computation required by the phone itself.,nonfunctional
+"There are no safety requirements with this application, other than any normal hazards of a mobile device. The only hazard is a user using the device when they should not be, such as while driving.",nonfunctional
+The application must be able to link up with the INTERNAL system in order for users to properly log in and be identified. This information must be kept secure.,nonfunctional
+"The primary attribute of this application will be usability given the large amounts of data and information that will be presented on such a small screen, as well as the userâ€™s ability to input data into the device in a reasonable manner that should not be that much more difficult than if they were at an actual computer.",nonfunctional
+"With regards to the intended number of users in the Amsterdam pilot, and the projected load scenarios, the intention is for the system to be able to serve 20.000 queries / day (in large part during the 4 peak traffic hours).",nonfunctional
+"In order to create a viable offering for the user we will have to build a simple, transparent system that can be understood and trusted by the people that are using it.",nonfunctional
+"Anonimization & aggregation, so that route information may be shared safely without disclosing personal information.",nonfunctional
+"Encryption, for all data that is privacy sensitive, but must be persisted on the server in order for basic functionality.",nonfunctional
+Permit the use of unverified (anonymous) avatars / aliases.,nonfunctional
+Give control to end-users over private data (at least a delete private repository option),nonfunctional
+"The system should be language agnostic, since portability is a prime goal of the overall project. English, turkish, Finnish, and Italian should be at least be supported because these are the replication partners.",nonfunctional
+All text elements in the user interfaces are presented in the selected language English and Dutch.,nonfunctional
+Sub-apps and their launchers can be added to the main app by a qualified programmer.,nonfunctional
+Sub-apps and their launchers in the main app can be deleted by a qualified programmer.,nonfunctional
+"The application maintainer should also be able to change the (lists of) information sources of the sub-applications: agenda, news, Facebook and Twitter",nonfunctional
+"Application maintainers should be able to maintain the application, without having knowledge about Java Android programming. They should be able to modify the approximate appearance of the application. This means the colors, and GUI figures in the applications, but not the addition/deletion of GUI elements.",nonfunctional
+"Application will be extendable. This means that a skilled Java Android programmer should be able to easily add a new sub-application to insApption, and add a launcher to it in the main-application.",nonfunctional
+Users must be a Radford University student in order to access the automatic class schedule and assignment sharing features of this application Users can authenticate by logging in using their RU username and password.,nonfunctional
+Most functionality will not require network connectivity. System components that require authentication through Radford University and network connectivity will function as long as the systems maintained by the University are available.,nonfunctional
+The development team will follow best practices for clean code and software modularity in order to make the application as maintainable as possible.,nonfunctional
+Users will be able to access this application on or off campus anytime on their mobile device without the need of an internet connection.,nonfunctional
+"The application will be highly extensible in terms of adding course and calendar details or views. However, the application in general has low extensibility.",nonfunctional
+An application instance shall be able to be reusable every semester for a returning student.The user will be able to update their class schedule by having the application check for a registered schedule set for the next semester and if the current school semester is over.Application components will be able to be integrated into the larger RU Mobile application developed and maintained by Radford University.,nonfunctional
+The system will be designed in such a way that the algorithms for the four main units will be able to be easily swapped out.,nonfunctional
+The accuracy of the Generic Question Constructionâ€‹ part will be close to 80%.,nonfunctional
+The accuracy of the Generic Answer Constructionâ€‹ unit will be close to 70%.,nonfunctional
+The accuracy of the Generic Answer Populationâ€‹ unit will be close to 70%.,nonfunctional
+"The average time for the server to respond, over the question testing set, will be less than or equal to 2 seconds.",nonfunctional
+"The connection between the Web API and the programs will use HTTPS, for security.",nonfunctional
+A new user will make less than 3 mistakes in 5 minutes after 5 minutes of use.,nonfunctional
+"FAU class contains requirements for recording the occurrence of security relevant events that take place under TSF control. This family identifies the level of auditing, enumerates the types of events that shall be auditable by the TSF, and identifies the minimum set of audit related information that should be provided within various audit record types. The following extended requirement for the FAU class has been included in this ST because the operational environment is capable of providing security audit generation for TSF functions.",nonfunctional
+"Performance should not be an issue because all of our server queries involve small pieces of data. Changing screens will require very little computation and thus will occur very quickly. Server updates should only take a few seconds as long as the phone can maintain a steady signal. The cost-division algorithms used by in application will be highly efficient, taking only a fraction of a second to compute.",nonfunctional
+SplitPay will not affect data stored outside of its servers nor will it affect any other applications installed on the userâ€™s phone. It cannot cause any damage to the phone or its internal components. The only potential safety concern associated with this application applies to virtually all handset apps: SplitPay should not be used while operating a vehicle or in any other situation where the userâ€™s attention must be focused elsewhere.,nonfunctional
+"This application assumes that only the user or whoever he/she allows will have access to his/her Android handset. With that being said, only a Google email address is required to verify the identity of the user upon opening the app. Since it is not password protected, there is no method to authenticate the userâ€™s identity. This could only pose a thread if a user has set up PayPal functionality, however any transaction involving real currency must be authorized and confirmed before becoming final. The PayPal API provides all of the security checks needed to ensure that no fraudulent transactions occur.",nonfunctional
+The graphical user interface of SplitPay is to be designed with usability as the first priority. The app will be presented and organized in a manner that is both visually appealing and easy for the user to navigate. There will be feedbacks and visual cues such as notifications to inform users of updates and pop-ups to provide users with instructions.,nonfunctional
+"To ensure reliability and correctness, there will be zero tolerance for errors in the algorithm that computes and splits expenses between group members. To maintain flexibility and adaptability, the app will take into account situations in which a user loses internet connection or for whatever reason cannot establish a connection with the server. These users will still be able to use the application, but any Bills, transactions, etc. posted while disconnected will be cached until the connection is restored.",nonfunctional
+All text elements in the user interfaces are presented in the selected language (for language selection see requirement UCAR101. The available languages are mentioned in UCAR002 and UCAR003),nonfunctional
+English is an available language.,nonfunctional
+Dutch is an available language.,nonfunctional
+The administrator can change the colors used in the user interfaces of the sub-apps and main-app (this does not include the external resources).,nonfunctional
+The administrator can change the fonts used in the user interfaces of the sub-apps and main-app (this does not include the external resources).,nonfunctional
+The administrator can change icons used in the user interfaces of the sub-apps and main-app (this does not include the external resources).,nonfunctional
+The administrator can change buttons used in the user interfaces of the sub-apps and main-app (this does not include the external resources).,nonfunctional
+The administrator can change the background used in the user interfaces of the sub- apps and main-app (this does not include the external resources).,nonfunctional
 The administrator can change text elements used in the user interfaces of the sub-apps and main-app (this does not include the external resources).,functional
 The language can only be selected in the main app.,functional
 The default language of insApption is English,functional

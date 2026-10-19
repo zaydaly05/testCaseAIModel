@@ -34,6 +34,42 @@ PROMISE_LABELS: dict[str, str] = {
     "PO": "operational",
 }
 
+# Label for rows only known to be non-functional (FR/NFR datasets); used by the
+# functional-vs-non-functional stage of the classifier.
+NONFUNCTIONAL = "nonfunctional"
+
+# DOSSPRE 1.0 classes, FR/NFR datasets and the LLM-classified requirements -> our categories.
+EXTRA_LABELS: dict[str, str] = {
+    # DOSSPRE
+    "functionality": "functional",
+    "performance": "performance",
+    "usability": "usability",
+    "authentication": "security",
+    "authorisation": "security",
+    "authorization": "security",
+    "confidentiality": "security",
+    "integrity": "security",
+    "immunity": "security",
+    "intrusiond": "security",
+    "identification": "security",
+    "detection": "security",
+    "auditing": "security",
+    "portability": "operational",
+    "maintainability": "operational",
+    "maintenability": "operational",
+    "maintanability": "operational",
+    "availability": "reliability",
+    "survivability": "reliability",
+    # FR/NFR and LLM classifications
+    "fr": "functional",
+    "functional": "functional",
+    "nfr": NONFUNCTIONAL,
+    "non-functional": NONFUNCTIONAL,
+    "nonfunctional": NONFUNCTIONAL,
+    "security": "security",
+    "interface": "usability",
+}
+
 # Base risk (1-3) used to prioritise test cases; higher means test first.
 CATEGORY_RISK: dict[str, int] = {
     "functional": 3,

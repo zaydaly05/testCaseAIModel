@@ -47,7 +47,9 @@ model = get_model()
 with st.sidebar:
     st.header("🧠 Model")
     meta = model.metadata
-    st.caption(f"Trained {meta.get('trained_at', '?')} on **{meta.get('n_samples', '?')}** labeled requirements")
+    st.caption(f"Trained {meta.get('trained_at', '?')} on **{meta.get('n_samples', '?')}** labeled requirements "
+               f"({meta.get('n_gold', '?')} with a specific category) and **{meta.get('n_unlabeled', 0)}** "
+               "unlabeled acceptance criteria from real stories")
     if ev := meta.get("evaluation"):
         c1, c2 = st.columns(2)
         c1.metric("Accuracy", f"{ev['accuracy']:.0%}")
@@ -138,11 +140,14 @@ with tab_manual:
 
 with tab_sample:
     st.write("Try the model without Jira.")
-    c1, c2 = st.columns(2)
-    if c1.button("Load demo stories"):
+    if st.button("Load demo stories"):
         add_stories([UserStory(**s) for s in json.loads((SAMPLES / "sample_stories.json").read_text())])
-    if c2.button("Load real stories (project dataset)"):
-        add_stories([UserStory(**s) for s in json.loads((SAMPLES / "real_stories.json").read_text())][:10])
+    drive_stories = json.loads((SAMPLES / "drive_stories.json").read_text(encoding="utf-8"))
+    c1, c2 = st.columns([3, 1])
+    n_real = c1.slider(f"Random real stories from the project dataset ({len(drive_stories)} available)", 1, 20, 5)
+    if c2.button("Load real stories"):
+        import random
+        add_stories([UserStory(**s) for s in random.sample(drive_stories, n_real)])
 
 stories: list[UserStory] = st.session_state.stories
 st.divider()

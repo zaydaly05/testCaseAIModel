@@ -14,7 +14,7 @@ from testcase_ai.model.taxonomy import CATEGORIES
 
 ROOT = Path(__file__).parent.parent
 SAMPLES = json.loads((ROOT / "samples" / "sample_stories.json").read_text())
-REAL = json.loads((ROOT / "samples" / "real_stories.json").read_text())
+REAL = json.loads((ROOT / "samples" / "drive_stories.json").read_text(encoding="utf-8"))
 BASE = "https://example.atlassian.net"
 
 
@@ -70,12 +70,14 @@ def test_promise_labels_are_mapped():
     assert map_label("SE") == "security"
     assert map_label("LF") == "usability"
     assert map_label("boundary") == "boundary"
-    assert map_label("NFR") is None
+    assert map_label("NFR") == "nonfunctional"
+    assert map_label("Authorisation") == "security"  # DOSSPRE
+    assert map_label("Other") is None
 
 
 def test_training_data_covers_all_categories():
     data = load_training_data()
-    assert set(data["category"]) == set(CATEGORIES)
+    assert set(CATEGORIES) <= set(data["category"])
     assert len(data) > 1000
     assert not data["text"].str.lower().duplicated().any()
 
@@ -127,7 +129,7 @@ def test_max_cases_prioritises_breadth(model):
 
 
 def test_real_stories_fully_covered(model):
-    for raw in REAL[:15]:
+    for raw in REAL[::40]:
         s = UserStory(**raw)
         suite = model.generate(s, max_cases=10)
         assert len({tc.acceptance_criterion for tc in suite.test_cases}) == len(suite.insights)
