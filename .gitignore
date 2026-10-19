@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.pytest_cache/
+.streamlit/secrets.toml
+
+# trained model, review corrections and uploaded datasets stay local
+models/
+
+# local process files
+*.pid
+
+# DeepEval reports (python -m evals.compare)
+evals/reports/
+.deepeval/

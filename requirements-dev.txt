@@ -1,0 +1,18 @@
+# Everything for training the model, the Streamlit app and the tests.
+-r requirements.txt
+scikit-learn>=1.4
+joblib>=1.3
+pandas>=2.0
+openpyxl>=3.1
+streamlit>=1.40
+uvicorn>=0.30
+
+# tests
+pytest>=8.0
+responses>=0.25
+httpx>=0.27
+# runs the generated Playwright web tests (then: playwright install chromium)
+pytest-playwright>=0.5
+# cross-model review with LLM-as-a-judge metrics (python -m evals.compare)
+deepeval>=4.3
+google-genai>=1.0   # only for a Gemini judge

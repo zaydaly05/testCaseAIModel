@@ -1,0 +1,7 @@
+# Runtime dependencies of the deployed API (Vercel installs these).
+# The model runs from the portable artifact, so scikit-learn is not needed here.
+fastapi>=0.115
+pydantic>=2.7
+requests>=2.31
+python-dotenv>=1.0
+cryptography>=42  # encrypts the Jira sign-in cookie

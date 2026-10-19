@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy · Test Case Generator</title>
+<style>
+  :root { --bg: #f6f7f9; --panel: #ffffff; --ink: #1c2330; --quiet: #5d6675; --line: #e2e5ea; --accent: #2f6fde; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12151b; --panel: #1b2029; --ink: #e8ebf0; --quiet: #a0a8b6; --line: #2c3340; --accent: #6b9cf0; }
+  }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+  article { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 24px 24px; }
+  h1 { font-size: 24px; margin: 16px 0 4px; }
+  h2 { font-size: 17px; margin: 28px 0 6px; }
+  p, li { margin: 6px 0; }
+  .quiet { color: var(--quiet); font-size: 13.5px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+<p><a href="/">← Back to Test Case Generator</a></p>
+<article>
+<h1>Privacy Policy</h1>
+<p class="quiet">Effective 19 October 2026</p>
+
+<p>Test Case Generator (at <a href="https://test-case-ai-model-plum.vercel.app">test-case-ai-model-plum.vercel.app</a>)
+turns user stories into test cases. This page explains what data the app accesses when you use it,
+especially when you sign in with your Atlassian account, and what happens to that data.</p>
+
+<h2>What we access when you sign in with Atlassian..</h2>
+<p>Signing in is optional. If you do, Atlassian asks you to approve these permissions:</p>
+<ul>
+  <li><b>Read Jira issues</b> (<code>read:jira-work</code>): used only to fetch the stories you ask for,
+      by issue key, by a JQL query, or with "Pull all stories".</li>
+  <li><b>Read your Jira profile</b> (<code>read:jira-user</code>): used only to show your display name
+      ("Signed in as …").</li>
+  <li><b>Offline access</b>: lets the app renew your sign-in without asking you to log in again every hour.</li>
+</ul>
+<p>The app also receives the list of Jira sites your account can access, so you can choose which one to use.
+It cannot create, change or delete anything in Jira.</p>
+
+<h2>How your data is used</h2>
+<p>Stories you fetch from Jira, or type or paste into the app, are sent to our server only to generate test cases.
+The model that generates them runs on our own server. Your stories are not sent to any third-party AI service.</p>
+
+<h2>What we store</h2>
+<ul>
+  <li><b>Stories and test cases are not stored.</b> They are processed while your request runs and then discarded.
+      Results exist only in your browser tab until you close or reload it, or in files you choose to download.</li>
+  <li><b>Sign-in tokens</b> are kept in your own browser as encrypted cookies that the page's scripts cannot read.
+      They are not stored on our servers. They expire after 30 days, and signing out deletes them immediately.</li>
+  <li>We do not create user accounts, and we keep no database of users or Jira data.</li>
+</ul>
+
+<h2>Cookies</h2>
+<p>The only cookies are the ones needed for Jira sign-in described above. There are no analytics, advertising
+or tracking cookies.</p>
+
+<h2>Sharing</h2>
+<p>We do not sell or share your data. The app is hosted on <a href="https://vercel.com/legal/privacy-policy">Vercel</a>,
+which processes requests to run the app and may keep standard access logs, such as IP address, time and requested URL.
+Jira data comes directly from Atlassian under <a href="https://www.atlassian.com/legal/privacy-policy">Atlassian's privacy policy</a>.</p>
+
+<h2>Removing access</h2>
+<p>Click <b>Sign out</b> in the app's Jira tab to delete the sign-in cookies. To revoke the app's access to your
+Atlassian account completely, remove it at
+<a href="https://id.atlassian.com/manage-profile/apps">id.atlassian.com/manage-profile/apps</a>.</p>
+
+<h2>Changes</h2>
+<p>If this policy changes, this page will be updated and the date at the top will change.</p>
+</article>
+</main>
+</body>
+</html>

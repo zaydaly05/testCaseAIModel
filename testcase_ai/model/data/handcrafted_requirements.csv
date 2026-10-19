@@ -1,0 +1,308 @@
+text,category
+User can add a product to the shopping cart from the product page,functional
+Clicking Add to cart adds the product with quantity 1,functional
+The user can search products by name and see matching results,functional
+When I click Save the profile changes are stored,functional
+A manager can create a new project with a name and description,functional
+The customer can download the invoice as a PDF,functional
+Users can filter orders by date range,functional
+The admin can export the user list to CSV,functional
+Given I am logged in When I click Logout Then I am returned to the login page,functional
+I can upload a profile picture from my device,functional
+The user can sort the table by any column,functional
+Selecting a country populates the list of states,functional
+The user can mark a task as complete,functional
+Customers can apply a discount code at checkout,functional
+The user can edit and delete their own comments,functional
+A teacher can assign homework to a class,functional
+Users can share a document link with teammates,functional
+The dashboard displays the total sales for the selected month,functional
+The system calculates the order total including tax,functional
+I can duplicate an existing report template,functional
+When a user submits the contact form a ticket is created,functional
+The user can switch between list and grid view,functional
+The app lets users bookmark articles to read later,functional
+Given a valid cart When I place the order Then an order number is generated,functional
+The email field must contain a valid email address,validation
+All mandatory fields must be filled before the form can be submitted,validation
+The phone number must be numeric and include the country code,validation
+The date of birth must be in the format DD/MM/YYYY,validation
+Username may only contain letters numbers and underscores,validation
+The postal code is validated against the selected country,validation
+Required fields are marked with an asterisk and cannot be left empty,validation
+The IBAN entered must pass checksum validation,validation
+Duplicate email addresses are not allowed during registration,validation
+The confirm password field must match the password field,validation
+The website URL must start with http or https,validation
+Special characters are not accepted in the first name field,validation
+The credit card number must be a valid Luhn number,validation
+Leading and trailing spaces are trimmed from the input,validation
+The end date cannot be earlier than the start date,validation
+Only PDF and DOCX files are accepted for upload,validation
+The quantity field accepts whole numbers only,validation
+Invalid coupon codes are rejected with a message,validation
+The tax ID must follow the national format,validation
+Email input is case insensitive when checking for existing accounts,validation
+The password must be at least 12 characters long,boundary
+A cart can contain at most 50 distinct products,boundary
+The comment cannot exceed 500 characters,boundary
+Users can upload files up to 10 MB,boundary
+The quantity must be between 1 and 99,boundary
+A maximum of 5 login attempts is allowed,boundary
+The title must have a minimum of 3 characters,boundary
+The age of the applicant must be 18 or older,boundary
+Each user can create up to 20 projects on the free plan,boundary
+The search query is limited to 100 characters,boundary
+A team can have no more than 10 members,boundary
+The withdrawal amount must not exceed the daily limit of 1000,boundary
+Discount percentage ranges from 0 to 100,boundary
+At least one item must be selected to continue,boundary
+The bio field allows a maximum of 160 characters,boundary
+Orders above 200 qualify for free shipping,boundary
+The list shows 25 items per page,boundary
+A poll must have between 2 and 10 options,boundary
+The username length must be 4 to 16 characters,boundary
+Passwords expire after 90 days,boundary
+The reservation can be made at most 30 days in advance,boundary
+Images smaller than 200 pixels wide are rejected,boundary
+Only users with the admin role can delete accounts,security
+Unauthenticated users are redirected to the login page,security
+Passwords are stored hashed and never shown in plain text,security
+The session expires after 15 minutes of inactivity,security
+A user cannot view another customer's orders,security
+Two factor authentication is required for administrators,security
+The account is locked after repeated failed login attempts,security
+All traffic is served over HTTPS,security
+Viewers have read only access to the dashboard,security
+API requests without a valid token return 401,security
+Personal data is masked in the logs,security
+Only the owner of a document can change its permissions,security
+The reset password link can be used only once,security
+Users must re-enter their password before changing their email,security
+Input is sanitized to prevent script injection,security
+Guests cannot access the checkout without signing in,security
+Support agents can see customer details but not payment information,security
+Submitting an unregistered email shows the same confirmation message,security
+Role based access control restricts the reports module to managers,security
+Sensitive fields are encrypted at rest,security
+Logging out invalidates the session token,security
+If the payment fails an error message is displayed and the order is not created,error_handling
+When the server is unavailable the app shows a friendly retry message,error_handling
+Uploading a corrupt file shows an error and nothing is saved,error_handling
+An expired link shows an error that the link has expired,error_handling
+If the network connection drops the draft is kept locally,error_handling
+Entering a wrong password displays Invalid credentials,error_handling
+When the third party service times out the request is retried 3 times,error_handling
+A 404 page is shown for unknown URLs,error_handling
+If the item is out of stock the user is informed and cannot add it,error_handling
+Failed imports show the row numbers that caused the error,error_handling
+Out of stock products cannot be added,error_handling
+When the card is declined the user can try another payment method,error_handling
+An error is logged and the admin is alerted if the nightly job fails,error_handling
+If the address cannot be verified the user is asked to correct it,error_handling
+Unexpected errors show a generic message without technical details,error_handling
+The system rolls back the transaction if any step fails,error_handling
+When the session expires during checkout the cart is preserved,error_handling
+Trying to delete a category in use shows a warning,error_handling
+If the file exceeds the size limit the upload is rejected with a message,error_handling
+A conflict message is shown when two users edit the same record,error_handling
+The order status changes from Pending to Shipped when dispatched,workflow
+A ticket can only be closed after it has been resolved,workflow
+The cart is kept after logging out and back in,workflow
+A draft article must be approved by an editor before publishing,workflow
+Cancelled orders cannot be reopened,workflow
+Changes are saved automatically every 30 seconds,workflow
+The leave request moves to Approved when the manager accepts it,workflow
+After payment is confirmed the subscription becomes active,workflow
+Archived projects are hidden from the main list but can be restored,workflow
+The onboarding wizard resumes at the last completed step,workflow
+An invoice is generated when the order is delivered,workflow
+Deleting a folder moves its files to the trash for 30 days,workflow
+A refund can only be requested within 14 days of delivery,workflow
+The task returns to In Progress if the reviewer rejects it,workflow
+Filters remain applied when navigating back to the list,workflow
+Once submitted the application can no longer be edited,workflow
+The status history records who changed the status and when,workflow
+A new user account starts in the Pending verification state,workflow
+The page loads in under 2 seconds,performance
+Search results are returned within 1 second for 95 percent of queries,performance
+The system supports 1000 concurrent users without degradation,performance
+The report for one year of data is generated in less than 10 seconds,performance
+The API responds within 300 milliseconds under normal load,performance
+The mobile app starts in under 3 seconds on a mid range device,performance
+Image thumbnails are generated within 5 seconds of upload,performance
+The checkout handles 200 orders per minute during sales,performance
+Bulk import of 10000 records completes in under a minute,performance
+The dashboard refreshes data every 60 seconds without freezing,performance
+The service maintains 99.9 percent uptime,performance
+Memory usage stays below 500 MB during long sessions,performance
+Autocomplete suggestions appear within 200 milliseconds of typing,performance
+The video starts playing within 2 seconds on a 4G connection,performance
+A confirmation email is sent after the order is placed,notification
+I receive a reset link by email within 5 minutes,notification
+The user gets a push notification when a message arrives,notification
+Managers are notified when a leave request is submitted,notification
+An SMS code is sent to verify the phone number,notification
+A reminder email is sent 24 hours before the appointment,notification
+Users can opt out of marketing emails,notification
+The assignee receives an alert when a ticket is assigned to them,notification
+A weekly summary email is sent every Monday,notification
+An in app banner informs users about scheduled maintenance,notification
+The customer is emailed when the order ships with a tracking link,notification
+Admins receive a daily digest of failed payments,notification
+A welcome email is sent after registration,notification
+Notification preferences can be changed in settings,notification
+The form is fully usable with the keyboard only,usability
+All images have alternative text for screen readers,usability
+The layout adapts to mobile tablet and desktop screen sizes,usability
+Text has a contrast ratio of at least 4.5 to 1,usability
+Error messages are shown next to the related field in red,usability
+A loading spinner is shown while data is fetched,usability
+The Save button is disabled until the form is valid,usability
+The page title and headings follow a logical order,usability
+The interface is available in English and Arabic with right to left support,usability
+Tooltips explain each icon on hover and focus,usability
+Focus moves to the dialog when it opens,usability
+Dates are displayed in the user's local time zone,usability
+The empty state shows a helpful message and a call to action,usability
+Screen readers announce the number of items in the cart,usability
+The current step is highlighted in the progress bar,usability
+Buttons have a minimum touch target of 44 pixels,usability
+The service is available 24 hours a day 7 days a week,reliability
+Data is backed up every night and can be restored within 4 hours,reliability
+If one server fails traffic is switched to a standby server without data loss,reliability
+Unsaved work is recovered after the browser crashes,reliability
+The system recovers automatically after a power outage,reliability
+Scheduled maintenance windows do not exceed 2 hours per month,reliability
+Messages queued while offline are delivered once the connection is restored,reliability
+No more than one hour of data may be lost in a disaster,reliability
+The app keeps working in read only mode when the database is unavailable,reliability
+Customer data is retained for 7 years to meet tax regulations,compliance
+Users must accept the terms and conditions before creating an account,compliance
+The system complies with GDPR and users can request deletion of their personal data,compliance
+Cookie consent is requested before tracking scripts are loaded,compliance
+Card payments follow PCI DSS requirements,compliance
+An audit log records every change to financial records,compliance
+Users under 13 cannot register without parental consent,compliance
+Medical records are handled according to HIPAA rules,compliance
+Invoices include the legally required company and tax details,compliance
+The web app works on the latest versions of Chrome Firefox Safari and Edge,operational
+The mobile app supports Android 10 and iOS 15 or later,operational
+The application can be deployed with Docker on any Linux server,operational
+Configuration values can be changed without redeploying the application,operational
+The system integrates with the existing LDAP directory,operational
+Logs are written in a format that the monitoring tool can read,operational
+The database can be migrated to a newer version without downtime,operational
+New report types can be added without changing existing code,operational
+The app can be installed from the company software portal,operational
+The login form requires both username and password,validation
+The system shall verify that the entered date is a valid calendar date,validation
+The system shall reject email addresses without an at sign,validation
+Only alphabetic characters are allowed in the city field,validation
+The amount field accepts numbers with up to two decimal places,validation
+The system shall check that the selected time slot is in the future,validation
+The VAT number is validated with the national registry before saving,validation
+A user must select a payment method before confirming the order,validation
+The system shall validate that the uploaded image is a JPG or PNG,validation
+The student ID must be exactly 8 digits,validation
+The form highlights fields that contain invalid values,validation
+The system shall not accept a blank project name,validation
+Passwords must contain an uppercase letter a number and a symbol,validation
+The system validates the ZIP code format for US addresses,validation
+The entered promo code is checked against active campaigns,validation
+The return date must be after the departure date,validation
+The system shall accept only one account per phone number,validation
+Prices must be positive numbers,validation
+Input fields reject HTML tags,validation
+The system shall verify the captcha before submitting the form,validation
+The file name must be at most 255 characters,boundary
+The system shall allow no more than 3 active sessions per user,boundary
+The cart total must be at least 10 dollars to check out,boundary
+Each class can enroll up to 30 students,boundary
+The discount cannot be greater than 50 percent,boundary
+The user can attach a maximum of 5 files per message,boundary
+The system supports passwords of 8 to 64 characters,boundary
+A loan amount between 1000 and 50000 can be requested,boundary
+Users can select up to 3 interests during sign up,boundary
+The OTP code is valid for 10 minutes,boundary
+A review must be between 20 and 2000 characters,boundary
+Applicants must be at least 21 years old,boundary
+The system shall display at most 10 recommendations,boundary
+Transfers above 10000 require additional approval,boundary
+A booking can include from 1 to 8 guests,boundary
+The hotel can be booked for a maximum of 14 nights,boundary
+The playlist can contain up to 500 songs,boundary
+Usernames shorter than 4 characters are rejected,boundary
+The system shall limit the number of API calls to 100 per minute,boundary
+When the upload fails the user sees an error and can retry,error_handling
+If the email is already registered an error message is shown,error_handling
+The system shall display a meaningful message when the search returns no results,error_handling
+When the database connection is lost the system shows a maintenance page,error_handling
+If the payment gateway does not respond the order stays pending,error_handling
+Invalid login attempts display an error without revealing which field was wrong,error_handling
+When a required service is down the user is informed and can try later,error_handling
+If the user enters an expired card the payment is rejected with a clear reason,error_handling
+The system shall show a warning when the user tries to leave with unsaved changes,error_handling
+If the import file has the wrong columns the import is stopped and the user is told why,error_handling
+Errors during report generation are logged and the user receives a notice,error_handling
+If an item becomes unavailable during checkout the customer is informed,error_handling
+The system handles a timeout from the bank by retrying once and then showing an error,error_handling
+When validation fails the entered data is kept so the user can correct it,error_handling
+If the scanned barcode is unknown the system asks the user to enter the code manually,error_handling
+The app shows an offline message when there is no internet connection,error_handling
+Trying to book an already booked slot shows a message that it is taken,error_handling
+If the PDF cannot be generated a download link is emailed later,error_handling
+When the order is shipped its status changes to Shipped and it can no longer be cancelled,workflow
+A new account remains inactive until the email address is verified,workflow
+The expense report goes to the manager for approval after it is submitted,workflow
+A rejected application can be edited and submitted again,workflow
+After three reminders the invoice status becomes Overdue,workflow
+Once an exam is published students can no longer change their answers,workflow
+A support ticket is reopened when the customer replies,workflow
+The shopping cart is cleared after the order is placed,workflow
+Draft posts are visible only to the author until published,workflow
+Completed tasks move to the Done column,workflow
+The item is reserved for 15 minutes while the customer completes payment,workflow
+A user who changes their email must verify the new address before it becomes active,workflow
+The selected language is remembered on the next visit,workflow
+An order can be cancelled only while it is in Pending or Processing status,workflow
+The system saves the progress of the form so the user can continue later,workflow
+A contract becomes Active when both parties have signed it,workflow
+After the trial period ends the account is downgraded to the free plan,workflow
+Approved leave days are deducted from the employee balance,workflow
+Patients receive an SMS reminder the day before their appointment,notification
+The system shall email the user a receipt after each payment,notification
+Followers are notified when a user publishes a new post,notification
+An alert is sent to the administrator when disk usage exceeds 90 percent,notification
+The seller gets an email when an item is sold,notification
+Students receive a notification when grades are published,notification
+The user is emailed a verification link after signing up,notification
+A push notification informs the driver about a new ride request,notification
+The system sends a password changed confirmation email,notification
+Team members receive a daily email digest of open tasks,notification
+The borrower is notified 3 days before the book is due,notification
+The customer receives an SMS with the delivery time window,notification
+Subscribers are emailed when their subscription is about to renew,notification
+An in app message tells the user that a new version is available,notification
+Users can choose to receive notifications by email SMS or push,notification
+The project owner is notified when a task is overdue,notification
+Only HR staff can view employee salaries,security
+Only the project owner can archive the project,security
+Only team leads are allowed to approve timesheets,security
+Only verified sellers can publish listings,security
+Only accountants may edit posted invoices,security
+Only the author of a post can edit or remove it,security
+Members cannot see the admin settings page,security
+Only users with the editor role can publish articles,security
+Only doctors can view a patient's full medical history,security
+Students cannot access other students' grades,security
+Only super admins can create new admin accounts,security
+Customers can only see their own orders,security
+Only the assigned agent can close a support ticket,security
+Only the treasurer can approve payments above the limit,security
+Guests can browse products but cannot place orders,security
+Deleting a team is restricted to the team owner,security
+Only licensed pharmacists can approve prescriptions,security
+A manager can see reports for their own department only,security
+Only the organizer can cancel the event,security
+Read-only users cannot change any settings,security
